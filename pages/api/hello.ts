@@ -9,7 +9,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const dir = path.resolve("ctfs/0x101");
+  const dir = path.resolve("ctfs/hello");
 
   if (req.method === 'POST') {
     let parseBody = JSON.parse(req.body);
@@ -19,7 +19,7 @@ export default async function handler(
 
   } else if (req.method === 'GET') {
     res.setHeader("Content-Type", "application/zip");
-    res.setHeader("Content-Disposition", "attachment; filename=CTF0x101.zip");
+    res.setHeader("Content-Disposition", "attachment; filename=hello.zip");
 
     const zip = archiver("zip");
     
@@ -27,7 +27,7 @@ export default async function handler(
       throw err;
     });
     zip.pipe(res);
-    zip.directory(dir, "0x101");
+    zip.directory(dir, "hello");
     zip.finalize();
   }  
 }
