@@ -53,7 +53,7 @@ export default function Home() {
           </div>
 
           <div className="mt-4">
-            Your mission is to hack "Borrow and Bye" contract.
+            Your mission is to hack &ldquo;Borrow and Bye&ldquo; contract.
             <br></br>
           </div>
 

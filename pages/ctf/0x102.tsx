@@ -53,7 +53,7 @@ export default function Home() {
           </div>
 
           <div className="mt-4">
-            Your mission is to steal all funds from Lanzy's treasury.
+            Your mission is to steal all funds from Lanzy&apos;s treasury.
           </div>
 
           <div className="mt-4">
