@@ -40,7 +40,7 @@ export default function Home() {
 
       <main className="relative pt-8 pb-3 px-2 sm:px-0">
         <div className="py-3">
-          <div className="text-[#2bbc8a]"> CTF::0x105::Flashloan</div>
+          <div className="text-[#2bbc8a]"> CTF::0x105::Borrow and Bye</div>
 
 
           {/* CTFs
@@ -53,12 +53,8 @@ export default function Home() {
           </div>
 
           <div className="mt-4">
-            Your mission is to hack a contract:: Lanzy.
+            Your mission is to hack "Borrow and Bye" contract.
             <br></br>
-            This is a smart contract where users deposit some bitcoin and receive 1:1 recepient token. User can also withdraw them back by depositing recepient token. 
-            <br></br>
-            That is if you hack the contract, you will be able to withdraw all
-            the funds from it! 😱
           </div>
 
           <div className="mt-4">
