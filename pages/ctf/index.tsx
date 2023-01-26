@@ -21,12 +21,12 @@ export default function Home() {
       year: 2022,
     },
     {
-      title: "104: Dyswap 💸",
+      title: "104: Dsyfunction Dyswap 💸",
       link: "/ctf/0x104",
       year: 2022,
     },
     {
-      title: "105: FlashLoan",
+      title: "105: Borrow and Bye",
       link: "/ctf/0x105",
       year: 2022,
     },
