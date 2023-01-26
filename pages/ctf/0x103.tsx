@@ -40,7 +40,7 @@ export default function Home() {
 
       <main className="relative pt-8 pb-3 px-2 sm:px-0">
         <div className="py-3">
-          <div className="text-[#2bbc8a]"> CTF::0x103::DeciSwap</div>
+          <div className="text-[#2bbc8a]"> CTF::0x103::Solman Brothers</div>
 
 
           {/* CTFs
@@ -53,12 +53,11 @@ export default function Home() {
           </div>
 
           <div className="mt-4">
-            Your mission is to hack a contract:: DeciSwap.
+            Your mission is to hack Solman Brothers - a bank that stores various forms of Solana in different vaults. 
             <br></br>
-            This is a smart contract where users can swap 
+            Currently it has 3 vaults storing $1M worth of wormhole-wrapped SOL, sollet-wrapped SOL and lido-staked SOL respectively. 
             <br></br>
-            That is if you hack the contract, you will be able to withdraw all
-            the funds from it! 😱
+            Steal half of the money to capture the flag! 
           </div>
 
           <div className="mt-4">
