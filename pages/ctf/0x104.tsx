@@ -3,7 +3,9 @@ import { Header } from "../../components/Header";
 // web3 stuff import
 import * as anchor from "@project-serum/anchor";
 import { Program } from "@project-serum/anchor";
-import { Lanzy, IDL } from "../../IDLs/lanzy";
+// import { HelloSupersec, IDL } from "../../IDLs/HelloSupersec";
+import { HelloSupersec, IDL } from "../../IDLs/hello_supersec";
+
 import { useConnection } from "@solana/wallet-adapter-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Fragment } from "react";
@@ -109,7 +111,7 @@ const NextStep = () => {
       IDL,
       IDL.metadata.address,
       provider
-    ) as Program<Lanzy>;
+    ) as Program<HelloSupersec>;
 
     const [challPubkey, _] = await anchor.web3.PublicKey.findProgramAddress(
       [Buffer.from("STATE"), signer.toBuffer()],
@@ -117,7 +119,7 @@ const NextStep = () => {
     );
 
     try {
-      const tx = await program.account.state.fetch(challPubkey);
+      const tx = await program.account.challAccount.fetch(challPubkey);
       if (tx) {
         setisInstanceDeployedState(true);
       } else {
@@ -143,7 +145,7 @@ const NextStep = () => {
     //     IDL,
     //     IDL.metadata.address,
     //     provider
-    //   ) as Program<Lanzy>;
+    //   ) as Program<HelloSupersec>;
 
     //   const txx = await program.methods.playeSetup();
     //   const autoInferKey = await txx.pubkeys();
@@ -217,7 +219,7 @@ const NextStep = () => {
         IDL,
         IDL.metadata.address,
         provider
-      ) as Program<Lanzy>;
+      ) as Program<HelloSupersec>;
 
       const [challPubkey, _] = await anchor.web3.PublicKey.findProgramAddress(
         [Buffer.from("hello-supersec"), signer.toBuffer()],

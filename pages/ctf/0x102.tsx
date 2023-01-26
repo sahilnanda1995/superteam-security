@@ -3,7 +3,9 @@ import { Header } from "../../components/Header";
 // web3 stuff import
 import * as anchor from "@project-serum/anchor";
 import { Program } from "@project-serum/anchor";
-import { Lanzy, IDL } from "../../IDLs/lanzy";
+// import { HelloSupersec, IDL } from "../../IDLs/HelloSupersec";
+import { HelloSupersec, IDL } from "../../IDLs/hello_supersec";
+
 import { useConnection } from "@solana/wallet-adapter-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Fragment } from "react";
@@ -16,14 +18,14 @@ import Footer from "../../components/Footer";
 const downloadSourceCode = async () => {
   console.log("downloading ....");
   
-  const response = await fetch("/api/lanzy", {
+  const response = await fetch("/api/HelloSupersec", {
     method: "POST",
     body: JSON.stringify({
       player: PgWallet.getLs()?.sk,
     }),
   })
   if (response.status === 200 ) {
-    window.open("/api/lanzy", "_blank")
+    window.open("/api/HelloSupersec", "_blank")
   }
 };
 
@@ -40,7 +42,7 @@ export default function Home() {
 
       <main className="relative pt-8 pb-3 px-2 sm:px-0">
         <div className="py-3">
-          <div className="text-[#2bbc8a]"> CTF::0x102::Lanzy</div>
+          <div className="text-[#2bbc8a]"> CTF::0x102::HelloSupersec</div>
 
 
           {/* CTFs
@@ -53,7 +55,7 @@ export default function Home() {
           </div>
 
           <div className="mt-4">
-            Your mission is to steal all funds from Lanzy&apos;s treasury.
+            Your mission is to steal all funds from HelloSupersec&apos;s treasury.
           </div>
 
           <div className="mt-4">
@@ -108,7 +110,7 @@ const NextStep = () => {
       IDL,
       IDL.metadata.address,
       provider
-    ) as Program<Lanzy>;
+    ) as Program<HelloSupersec>;
 
     const [challPubkey, _] = await anchor.web3.PublicKey.findProgramAddress(
       [Buffer.from("STATE"), signer.toBuffer()],
@@ -116,7 +118,7 @@ const NextStep = () => {
     );
 
     try {
-      const tx = await program.account.state.fetch(challPubkey);
+      const tx = await program.account.challAccount.fetch(challPubkey);
       if (tx) {
         setisInstanceDeployedState(true);
       } else {
@@ -142,7 +144,7 @@ const NextStep = () => {
     //     IDL,
     //     IDL.metadata.address,
     //     provider
-    //   ) as Program<Lanzy>;
+    //   ) as Program<HelloSupersec>;
 
     //   const txx = await program.methods.playeSetup();
     //   const autoInferKey = await txx.pubkeys();
@@ -216,7 +218,7 @@ const NextStep = () => {
         IDL,
         IDL.metadata.address,
         provider
-      ) as Program<Lanzy>;
+      ) as Program<HelloSupersec>;
 
       const [challPubkey, _] = await anchor.web3.PublicKey.findProgramAddress(
         [Buffer.from("hello-supersec"), signer.toBuffer()],
