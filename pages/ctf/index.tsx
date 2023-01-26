@@ -16,7 +16,7 @@ export default function Home() {
       year: 2022,
     },
     {
-      title: "103: DeciSwap",
+      title: "103: Bankrupt Solman Brothers",
       link: "/ctf/0x103",
       year: 2022,
     },
