@@ -53,12 +53,7 @@ export default function Home() {
           </div>
 
           <div className="mt-4">
-            Your mission is to hack a contract:: Lanzy.
-            <br></br>
-            This is a smart contract where users deposit some bitcoin and receive 1:1 recepient token. User can also withdraw them back by depositing recepient token. 
-            <br></br>
-            That is if you hack the contract, you will be able to withdraw all
-            the funds from it! 😱
+            Your mission is to steal all funds from Lanzy's treasury.
           </div>
 
           <div className="mt-4">
