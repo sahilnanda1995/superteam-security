@@ -3,8 +3,7 @@ import { Header } from "../../components/Header";
 // web3 stuff import
 import * as anchor from "@project-serum/anchor";
 import { Program } from "@project-serum/anchor";
-// import { HelloSupersec, IDL } from "../../IDLs/HelloSupersec";
-import { HelloSupersec, IDL } from "../../IDLs/hello_supersec";
+import { Lanzy, IDL } from "../../IDLs/lanzy";
 
 import { useConnection } from "@solana/wallet-adapter-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -18,10 +17,10 @@ import Footer from "../../components/Footer";
 const downloadSourceCode = async () => {
   console.log("downloading ....");
   
-  const response = await fetch("/api/HelloSupersec", {
+  const response = await fetch("/api/lanzy", {
     method: "POST",
     body: JSON.stringify({
-      player: PgWallet.getLs()?.sk,
+      player: PgWallet.getLs(),
     }),
   })
   if (response.status === 200 ) {
