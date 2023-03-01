@@ -3,7 +3,7 @@ seeds = true
 skip-lint = false
 
 [programs.devnet]
-hello_supersec = "CV6Gb6rQw4MEKsULFTLZEuYQmKNYvmMvRhMJ5WWZLJd2"
+hello_supersec = "5qMReBnd8bayHtoXo75xLP9KvBB2ybxw8QvJaJ9FDFJW"
 
 [registry]
 url = "https://api.apr.dev"

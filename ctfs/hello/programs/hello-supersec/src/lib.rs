@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount};
 
-declare_id!("CV6Gb6rQw4MEKsULFTLZEuYQmKNYvmMvRhMJ5WWZLJd2");
+declare_id!("5qMReBnd8bayHtoXo75xLP9KvBB2ybxw8QvJaJ9FDFJW");
 
 #[program]
 pub mod hello_supersec {
@@ -12,12 +12,17 @@ pub mod hello_supersec {
     /// Please scroll below to the section titled "VULNERABILITY LIES BELOW"
 
     pub fn init(ctx: Context<Initialize>) -> Result<()> {
+        msg!("Hey, {:?} :: Welcome!", ctx.accounts.signer.key());
+
         ctx.accounts.chall_account.pawned = false;
         ctx.accounts.chall_account.bump = *ctx.bumps.get("chall_account").unwrap();
         ctx.accounts.chall_account.reward_vault_bump = *ctx.bumps.get("reward_vault").unwrap();
+        let reward_mint_bump = *ctx.bumps.get("reward_mint").unwrap();
+        ctx.accounts.chall_account.reward_mint_bump = *ctx.bumps.get("reward_mint").unwrap();
 
         // Minting 1 billion reward token
-        let signer: &[&[&[u8]]] = &[&["reward_mint".as_ref(), &[251]]];
+        let chall_account = ctx.accounts.chall_account.key();
+        let signer: &[&[&[u8]]] = &[&["reward_mint".as_ref(), chall_account.as_ref(), &[reward_mint_bump]]];
         let cpi_ctx = CpiContext::new_with_signer(
             ctx.accounts.token_program.to_account_info(),
             token::MintTo {
@@ -29,7 +34,6 @@ pub mod hello_supersec {
         );
         token::mint_to(cpi_ctx, 1_000_000_000_000_000_000)?;
 
-        msg!("Hey, {:?} :: Welcome!", ctx.accounts.signer.key());
         Ok(())
     }
 
@@ -125,14 +129,17 @@ pub struct Initialize<'info> {
         seeds = ["hello-supersec".as_bytes(), signer.key().as_ref()],
         bump,
         payer = signer,
-        space = 8 + 1+ 1 + 1
+        space = 8 + 1+ 1 + 1 + 1
     )]
     pub chall_account: Account<'info, ChallAccount>,
 
     #[account(
-        mut,
-        seeds = ["reward_mint".as_bytes()],
-        bump = 251,
+        init,
+        payer = signer,
+        mint::decimals = 9,
+        mint::authority = reward_mint,
+        seeds = ["reward_mint".as_bytes(), chall_account.key().as_ref()],
+        bump,
     )]
     pub reward_mint: Account<'info, Mint>,
 
@@ -164,8 +171,8 @@ pub struct ChallContext<'info> {
     pub chall_account: Account<'info, ChallAccount>,
 
     #[account(
-        seeds = ["reward_mint".as_bytes()],
-        bump = 251,
+        seeds = ["reward_mint".as_bytes(), chall_account.key().as_ref()],
+        bump = chall_account.reward_mint_bump,
     )]
     pub reward_mint: Account<'info, Mint>,
 
@@ -202,8 +209,8 @@ pub struct Close<'info> {
 
     #[account(
         mut,
-        seeds = ["reward_mint".as_bytes()],
-        bump = 251,
+        seeds = ["reward_mint".as_bytes(), chall_account.key().as_ref()],
+        bump = chall_account.reward_mint_bump,
     )]
     pub reward_mint: Account<'info, Mint>,
 
@@ -223,4 +230,5 @@ pub struct ChallAccount {
     pawned: bool,
     bump: u8,
     reward_vault_bump: u8,
+    reward_mint_bump: u8,
 }

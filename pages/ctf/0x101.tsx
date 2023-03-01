@@ -72,7 +72,7 @@ export default function Home() {
     console.log("signedMessage.toString() :: ", signedMessage);
 
     try {
-      fetch(`http://localhost:3000/user`, {
+      fetch(`http://147.182.251.47/user`, {
         method: "POST",
         headers: new Headers({
           "Content-Type": "application/json",
