@@ -14,7 +14,7 @@ export default async function handler(
   if (req.method === 'POST') {
     let parseBody = JSON.parse(req.body);
     // Add user.keypair
-    fs.writeFileSync(`${dir}/keys/player.json`, JSON.stringify(parseBody.player));
+    fs.writeFileSync(`${dir}/keys/player.json`, JSON.stringify(parseBody));
     res.status(200).json({ status: "Done" });
 
   } else if (req.method === 'GET') {

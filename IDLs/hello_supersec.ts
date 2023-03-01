@@ -39,6 +39,12 @@ export type HelloSupersec = {
                 "kind": "const",
                 "type": "string",
                 "value": "reward_mint"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "ChallAccount",
+                "path": "chall_account"
               }
             ]
           }
@@ -158,7 +164,7 @@ export type HelloSupersec = {
       ],
       "args": [
         {
-          "name": "magic",
+          "name": "sugaku",
           "type": "u64"
         }
       ]
@@ -251,13 +257,17 @@ export type HelloSupersec = {
           {
             "name": "rewardVaultBump",
             "type": "u8"
+          },
+          {
+            "name": "rewardMintBump",
+            "type": "u8"
           }
         ]
       }
     }
   ],
   "metadata": {
-    "address": "CV6Gb6rQw4MEKsULFTLZEuYQmKNYvmMvRhMJ5WWZLJd2"
+    "address": "5qMReBnd8bayHtoXo75xLP9KvBB2ybxw8QvJaJ9FDFJW"
   }
 };
 
@@ -302,6 +312,12 @@ export const IDL: HelloSupersec = {
                 "kind": "const",
                 "type": "string",
                 "value": "reward_mint"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "ChallAccount",
+                "path": "chall_account"
               }
             ]
           }
@@ -421,7 +437,7 @@ export const IDL: HelloSupersec = {
       ],
       "args": [
         {
-          "name": "magic",
+          "name": "sugaku",
           "type": "u64"
         }
       ]
@@ -514,12 +530,16 @@ export const IDL: HelloSupersec = {
           {
             "name": "rewardVaultBump",
             "type": "u8"
+          },
+          {
+            "name": "rewardMintBump",
+            "type": "u8"
           }
         ]
       }
     }
   ],
   "metadata": {
-    "address": "CV6Gb6rQw4MEKsULFTLZEuYQmKNYvmMvRhMJ5WWZLJd2"
+    "address": "5qMReBnd8bayHtoXo75xLP9KvBB2ybxw8QvJaJ9FDFJW"
   }
 };

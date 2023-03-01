@@ -9,6 +9,8 @@ type Props = {
 export const SelectAndConnectWalletButton: FC<Props> = ({
   onUseWalletClick,
 }) => {
+  console.log("Heyo");
+  
   const { setVisible } = useWalletModal();
   const { wallet, connect, connecting, publicKey } = useWallet();
 

@@ -10,11 +10,12 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const dir = path.resolve("ctfs/lanzy");
+try {
 
   if (req.method === 'POST') {
     let parseBody = JSON.parse(req.body);
-    // Add user.keypair
-    fs.writeFileSync(`${dir}/keys/player.json`, JSON.stringify(parseBody.player));
+    
+    fs.writeFileSync(`${dir}/keys/pubkeys.json`, JSON.stringify(parseBody));
     res.status(200).json({ status: "Done" });
 
   } else if (req.method === 'GET') {
@@ -30,4 +31,9 @@ export default async function handler(
     zip.directory(dir, "lanzy");
     zip.finalize();
   }  
+} catch (e) {
+  console.log(`error :: ${e}`);
+  
+}
+
 }

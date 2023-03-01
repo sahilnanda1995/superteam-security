@@ -17,7 +17,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
     <ConnectionProvider endpoint={endpoint}>
-    <WalletProvider>
+    <WalletProvider autoConnect>
       <Component {...pageProps} />
       <Analytics />
     </WalletProvider>

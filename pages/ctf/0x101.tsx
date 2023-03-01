@@ -4,7 +4,7 @@ import { Header } from "../../components/Header";
 import * as anchor from "@project-serum/anchor";
 import { Program } from "@project-serum/anchor";
 import { HelloSupersec, IDL } from "../../IDLs/hello_supersec";
-import { useAnchorWallet } from "@solana/wallet-adapter-react";
+import { useAnchorWallet, useWallet } from "@solana/wallet-adapter-react";
 import { useConnection } from "@solana/wallet-adapter-react";
 import { SelectAndConnectWalletButton } from "../../components/SelectAndConnectWalletButton";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -12,15 +12,19 @@ import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { PgWallet } from "../../utils/wallet";
+import { getLs, PgWallet } from "../../utils/wallet";
 import { PgCommon } from "../../utils/common";
 import Footer from "../../components/Footer";
+import Router from "next/router";
+import dynamic from "next/dynamic";
+import NodeWallet from "@project-serum/anchor/dist/cjs/nodewallet";
 
 const downloadSourceCode = async () => {
+  let game_wallet = localStorage.getItem("wallet");
   const response = await fetch("/api/hello", {
     method: "POST",
     body: JSON.stringify({
-      player: PgWallet.getLs()?.sk,
+      player: JSON.parse(game_wallet!).sk,
     }),
   })
   if (response.status === 200 ) {
@@ -28,7 +32,83 @@ const downloadSourceCode = async () => {
   }
 };
 
+const WalletMultiButtonDynamic = dynamic(
+  async () =>
+    (await import("@solana/wallet-adapter-react-ui")).WalletMultiButton,
+  { ssr: false }
+);
+
 export default function Home() {
+  const gameWallet = getLs();
+  const wallet = useWallet();
+
+  async function createGameWallet() {
+    console.log("Create game wallet ...");
+
+    if (!wallet.publicKey) {
+      console.log("Connecting");
+      await wallet.connect();
+    }
+
+    console.log("wallet :: ", wallet.publicKey);
+
+    const message = `Sign-up me for CTF 
+    Click Sign or Approve only means you have proved this wallet is owned by you.`;
+
+    const encodedMessage = new TextEncoder().encode(message);
+
+    if (!wallet.signMessage)
+      throw new Error("Wallet does not support message signing!");
+
+    const signedMessage = await (window as any).solana.request({
+      method: "signMessage",
+      params: {
+        message: encodedMessage,
+        display: "utf8", //hex,utf8
+      },
+    });
+
+    // const signedMessage = await signMessage(encodedMessage);
+    console.log("signedMessage.toString() :: ", signedMessage);
+
+    try {
+      fetch(`http://localhost:3000/user`, {
+        method: "POST",
+        headers: new Headers({
+          "Content-Type": "application/json",
+        }),
+        body: JSON.stringify({
+          pubkey: signedMessage.publicKey,
+          sig: signedMessage.signature,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("data :: ", data);
+          if (data) {
+            if (data.game_wallet === "null") {
+              console.log("Not found, need to create game wallet first");
+            }
+          }
+          // setData(data)
+          // localStorage.setItem("wallet", JSON.stringify(data.game_wallet));
+          localStorage.setItem(
+            "wallet",
+            JSON.stringify({
+              connected: true,
+              sk: data.game_wallet,
+            })
+          );
+          // gameWallet.reload()
+          Router.reload();
+
+          // setLoading(false)
+        });
+    } catch (error) {
+      console.log("error, error");
+    }
+  }
+
   return (
     <div className="px-4 sm:px-0 max-w-4xl m-auto">
       <Head>
@@ -65,9 +145,16 @@ export default function Home() {
             To start hacking:
             <div className="mt-4 ml-2">
               <ol className="list-disc ml-4">
-                <li>
-                  Download the source code after clicking on commence mission
-                </li>
+              {gameWallet.connected ? (
+                  <li>
+                    Download the source code after clicking on commence mission
+                  </li>
+                ) : (
+                  <li>
+                    Create Game Wallet and then download the source code after
+                    clicking on commence mission
+                  </li>
+                )}
                 <li>
                   Noob to CTF&apos;s? We got you:{" "}
                   <Link href="/guides/101">
@@ -77,10 +164,26 @@ export default function Home() {
               </ol>
             </div>
           </div>
-          <NextStep />
+          {wallet.connected ? (
+            gameWallet.connected ? (
+              <NextStep />
+            ) : (
+              <div>
+                <button
+                  onClick={createGameWallet}
+                  className="mt-8 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                  Create game wallet
+                </button>
+              </div>
+            )
+          ) : (
+            <div className="mt-8">
+              <WalletMultiButtonDynamic />
+            </div>
+          )}
         </div>
       </main>
-
       <Footer />
 
       {/* <footer className="left-0 right-0 w-full p-6 text-center text-[#e1e2e3]">
@@ -107,11 +210,17 @@ export default function Home() {
 }
 
 const NextStep = () => {
-  // const wallet = useAnchorWallet();
-  const wallet = new PgWallet();
+  // const gameWallet = getLs();
+  const gameWallet = new PgWallet();
+
+  const wallet = useWallet();
+  const anchorWallet = useAnchorWallet();
 
   const { connection } = useConnection();
   const [open, setOpen] = useState(false);
+
+  const [isStateReady, setStateReady] = useState(false);
+  const [deployLoader, setdeployLoader] = useState(false);
 
   const [isInstanceDeployedState, setisInstanceDeployedState] =
     useState<boolean>(false);
@@ -122,9 +231,12 @@ const NextStep = () => {
   const isInstanceDeployed = useCallback(async () => {
     console.log("Checking if user've already deployed instance");
 
-    const signer = wallet.publicKey;
-
-    const provider = new anchor.AnchorProvider(connection, wallet, {
+    const signer = gameWallet.publicKey;
+    console.log("signer :: ", signer.toString());
+    
+    if (!signer || !anchorWallet) throw new Error("Signer doesn't exist");
+    
+    const provider = new anchor.AnchorProvider(connection, gameWallet, {
       preflightCommitment: "recent",
       commitment: "processed",
     });
@@ -134,7 +246,7 @@ const NextStep = () => {
       provider
     ) as Program<HelloSupersec>;
 
-    const [challPubkey, _] = await anchor.web3.PublicKey.findProgramAddress(
+    const [challPubkey, _] = anchor.web3.PublicKey.findProgramAddressSync(
       [Buffer.from("hello-supersec"), signer.toBuffer()],
       program.programId
     );
@@ -142,6 +254,7 @@ const NextStep = () => {
     try {
       const tx = await program.account.challAccount.fetch(challPubkey);
       if (tx) {
+        console.log("Instance is already created ....", challPubkey.toString());
         setisInstanceDeployedState(true);
       } else {
         console.log("Need to deploy the instance");
@@ -149,15 +262,27 @@ const NextStep = () => {
     } catch (e) {
       console.log(e);
     }
+    setStateReady(true);
   }, [connection]);
 
   async function deployNewInstance() {
     console.log("Deploying");
+    setdeployLoader(true);
 
-    if (wallet) {
-      const signer = wallet.publicKey;
+    if (anchorWallet?.publicKey) {
+      // Airdrop some sol
+      const airdropTxHash = await connection.requestAirdrop(
+        gameWallet.publicKey,
+        PgCommon.solToLamports(1)
+      );
+      await connection.confirmTransaction({ signature: airdropTxHash, ...(await connection.getLatestBlockhash())});
+      console.log(`Airdrop txHash :: ${airdropTxHash}`);
 
-      const provider = new anchor.AnchorProvider(connection, wallet, {
+      const signer = gameWallet.publicKey;
+      if (!signer || !anchorWallet) throw new Error("Signer doesn't exist");
+
+      try {
+      const provider = new anchor.AnchorProvider(connection, gameWallet, {
         preflightCommitment: "recent",
         commitment: "processed",
       });
@@ -186,15 +311,21 @@ const NextStep = () => {
 
       if (confirmTx.value?.confirmationStatus === "confirmed") {
         setisInstanceDeployedState(true);
+        setdeployLoader(false);
       }
+    } catch (error) {
+      console.log("error ::", error);
+      setdeployLoader(false);
+    }
+
     }
   }
 
   const removeInstance = async () => {
     if (wallet) {
-      const signer = wallet.publicKey;
-
-      const provider = new anchor.AnchorProvider(connection, wallet, {
+      const signer = gameWallet.publicKey;
+      if (!signer || !anchorWallet) throw new Error("Signer doesn't exist");
+      const provider = new anchor.AnchorProvider(connection, anchorWallet, {
         preflightCommitment: "recent",
         commitment: "processed",
       });
@@ -223,13 +354,14 @@ const NextStep = () => {
   };
 
   const getFlag = async () => {
-    setGetFlagA(true);
+    // setGetFlagA(true);
     console.log("Checking if user pawned it or not");
 
     if (wallet) {
-      const signer = wallet.publicKey;
+      const signer = gameWallet.publicKey;
+      if (!signer || !anchorWallet) throw new Error("Signer doesn't exist");
 
-      const provider = new anchor.AnchorProvider(connection, wallet, {
+      const provider = new anchor.AnchorProvider(connection, anchorWallet, {
         preflightCommitment: "recent",
         commitment: "processed",
       });
@@ -239,7 +371,7 @@ const NextStep = () => {
         provider
       ) as Program<HelloSupersec>;
 
-      const [challPubkey, _] = await anchor.web3.PublicKey.findProgramAddress(
+      const [challPubkey, _] = anchor.web3.PublicKey.findProgramAddressSync(
         [Buffer.from("hello-supersec"), signer.toBuffer()],
         program.programId
       );
@@ -265,6 +397,7 @@ const NextStep = () => {
 
   return (
     <>
+    {isStateReady ? (
       <div>
         {isInstanceDeployedState ? (
           <>
@@ -299,6 +432,18 @@ const NextStep = () => {
               >
                 Reset Mission
               </button>
+              {deployLoader ? (
+                <div
+                  className="inline-block ml-4 h-4 w-4 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                  role="status"
+                >
+                  <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                    Loading...
+                  </span>
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
           </>
         ) : (
@@ -312,7 +457,9 @@ const NextStep = () => {
           </div>
         )}
       </div>
-
+    ): (
+      <div></div>
+    )}
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={setOpen}>
           <Transition.Child

@@ -9,12 +9,12 @@ declare_id!("9pxo7qTLi5vah4DQj7478pNQUtNJ6pXsHdSKoW3kcQJc");
 pub mod lanzy {
     use super::*;
 
-    pub fn playe_setup(ctx: Context<PlayerSetup>) -> Result<()> {
-        msg!("lanzy :: PlayerSetup");
+    pub fn challenge_setup(ctx: Context<PlayerSetup>) -> Result<()> {
+        msg!("lanzy :: challenge_setup");
 
-        ctx.accounts.state.bump = *ctx.bumps.get("state").unwrap();
-        ctx.accounts.state.deposit_account = ctx.accounts.deposit_account.key();
-        ctx.accounts.state.deposit_mint = ctx.accounts.deposit_mint.key();
+        ctx.accounts.challenge_account.bump = *ctx.bumps.get("challenge_account").unwrap();
+        ctx.accounts.challenge_account.deposit_account = ctx.accounts.deposit_account.key();
+        ctx.accounts.challenge_account.deposit_mint = ctx.accounts.deposit_mint.key();
 
         Ok(())
     }
@@ -22,7 +22,7 @@ pub mod lanzy {
     pub fn deposit(ctx: Context<Transact>, amount: u64) -> Result<()> {
         msg!("lanzy :: deposit");
 
-        let state_seed: &[&[&[u8]]] = &[&[ctx.accounts.player.key.as_ref(), "STATE".as_ref(), &[ctx.accounts.state.bump]]];
+        let state_seed: &[&[&[u8]]] = &[&[ctx.accounts.player.key.as_ref(), "CHALLENGE".as_ref(), &[ctx.accounts.challenge_account.bump]]];
 
         token::transfer(CpiContext::new(
             ctx.accounts.token_program.to_account_info(),
@@ -38,7 +38,7 @@ pub mod lanzy {
             MintTo {
                 mint: ctx.accounts.voucher_mint.to_account_info(),
                 to: ctx.accounts.depositor_voucher_account.to_account_info(),
-                authority: ctx.accounts.state.to_account_info(),
+                authority: ctx.accounts.challenge_account.to_account_info(),
             },
             state_seed,
         ), amount)?;
@@ -49,7 +49,7 @@ pub mod lanzy {
     pub fn withdraw(ctx: Context<Transact>, amount: u64) -> Result<()> {
         msg!("lanzy :: withdraw");
 
-        let state_seed: &[&[&[u8]]] = &[&[ctx.accounts.player.key.as_ref(), "STATE".as_ref(), &[ctx.accounts.state.bump]]];
+        let state_seed: &[&[&[u8]]] = &[&[ctx.accounts.player.key.as_ref(), "CHALLENGE".as_ref(), &[ctx.accounts.challenge_account.bump]]];
 
         token::burn(CpiContext::new(
             ctx.accounts.token_program.to_account_info(),
@@ -65,7 +65,7 @@ pub mod lanzy {
             Transfer {
                 from: ctx.accounts.deposit_account.to_account_info(),
                 to: ctx.accounts.depositor_account.to_account_info(),
-                authority: ctx.accounts.state.to_account_info(),
+                authority: ctx.accounts.challenge_account.to_account_info(),
             },
             state_seed,
         ), amount)?;
@@ -81,15 +81,15 @@ pub struct PlayerSetup<'info> {
     #[account(mut)]
     pub player: Signer<'info>,
 
-    /// New state account for each player
+    /// Creating challenge account for every player
     #[account(
         init,
-        seeds = [player.key().as_ref(), "STATE".as_ref()],
+        seeds = [player.key().as_ref(), "CHALLENGE".as_ref()],
         bump,
         payer = player,
-        space = 8 + size_of::<State>(),
+        space = 8 + size_of::<Challenge>(),
     )]
-    pub state: Account<'info, State>,
+    pub challenge_account: Account<'info, Challenge>,
 
     pub deposit_mint: Account<'info, Mint>,
 
@@ -98,7 +98,7 @@ pub struct PlayerSetup<'info> {
         seeds = [player.key().as_ref(), "TOKEN".as_ref()],
         bump,
         token::mint = deposit_mint,
-        token::authority = state,
+        token::authority = challenge_account,
         payer = player,
     )]
     pub deposit_account: Account<'info, TokenAccount>,
@@ -107,7 +107,7 @@ pub struct PlayerSetup<'info> {
         init,
         seeds = [player.key().as_ref(), "VOUCHER".as_ref()],
         bump,
-        mint::authority = state,
+        mint::authority = challenge_account,
         mint::decimals = deposit_mint.decimals,
         payer = player,
     )]
@@ -121,21 +121,21 @@ pub struct PlayerSetup<'info> {
 
 #[derive(Accounts)]
 pub struct Transact<'info> {
-    /// CHECK: state of player
+    /// CHECK: player of challenge_account.
     pub player: AccountInfo<'info>,
 
     pub depositor: Signer<'info>,
 
-    #[account(seeds = [player.key().as_ref(), "STATE".as_ref()], bump = state.bump)]
-    pub state: Account<'info, State>,
+    #[account(seeds = [player.key().as_ref(), "CHALLENGE".as_ref()], bump = challenge_account.bump)]
+    pub challenge_account: Account<'info, Challenge>,
 
-    #[account(mut, address = state.deposit_account)]
+    #[account(mut, address = challenge_account.deposit_account)]
     pub deposit_account: Account<'info, TokenAccount>,
 
-    #[account(mut, constraint = voucher_mint.mint_authority == COption::Some(state.key()))]
+    #[account(mut, constraint = voucher_mint.mint_authority == COption::Some(challenge_account.key()))]
     pub voucher_mint: Account<'info, Mint>,
 
-    #[account(mut, constraint = depositor_account.mint == state.deposit_mint)]
+    #[account(mut, constraint = depositor_account.mint == challenge_account.deposit_mint)]
     pub depositor_account: Account<'info, TokenAccount>,
 
     #[account(mut, constraint = depositor_voucher_account.mint == voucher_mint.key())]
@@ -144,10 +144,12 @@ pub struct Transact<'info> {
     pub token_program: Program<'info, Token>,
 }
 
+#[derive(Accounts)]
+pub struct Test<> {}
 
 #[account]
 #[derive(Default)]
-pub struct State {
+pub struct Challenge {
     bump: u8,
     deposit_account: Pubkey,
     deposit_mint: Pubkey,

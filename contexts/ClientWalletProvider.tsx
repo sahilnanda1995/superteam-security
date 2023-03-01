@@ -9,6 +9,7 @@ import {
   SolletExtensionWalletAdapter,
   SolletWalletAdapter,
   GlowWalletAdapter,
+  BackpackWalletAdapter
 } from "@solana/wallet-adapter-wallets";
 
 import { useMemo } from "react";
@@ -28,6 +29,7 @@ export function ClientWalletProvider(
       new SolletWalletAdapter(),
       new SolletExtensionWalletAdapter(),
       new GlowWalletAdapter(),
+      new BackpackWalletAdapter()
     ],
     []
   );

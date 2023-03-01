@@ -1,14 +1,20 @@
 import { useConnection } from "@solana/wallet-adapter-react";
 import { useEffect, useState } from "react";
 import { PgCommon } from "../utils/common";
-import { PgWallet } from "../utils/wallet";
+import { getLs } from "../utils/wallet";
 import { CheckIcon } from "@heroicons/react/24/outline";
 
 export default function Footer() {
-  const pgWallet = new PgWallet();
+  let pgWallet = getLs();
+
   const [balance, setBalance] = useState(0);
   const { connection: conn } = useConnection();
   const [rateLimited, setRateLimited] = useState(false);
+  // const [pgWallet, setPgWallet] = useState<PgWallet>(new PgWallet());
+
+  // useEffect(() => {
+  //   setPgWallet(new PgWallet())
+  // }, [localStorage.getItem("wallet")])
 
   const airdrop = () => {
     console.log("airdropping ...");
@@ -19,7 +25,7 @@ export default function Footer() {
 
         await conn.requestAirdrop(
           pgWallet.publicKey,
-          PgCommon.solToLamports(2)
+          PgCommon.solToLamports(1)
         );
       } catch (e: any) {
         if (e.message.startsWith("429 Too Many Requests")) setRateLimited(true);
