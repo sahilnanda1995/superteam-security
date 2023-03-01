@@ -85,7 +85,7 @@ export default function Home() {
     console.log("signedMessage.toString() :: ", signedMessage);
 
     try {
-      fetch(`http://147.182.251.47/user`, {
+      fetch(`https://xctfserver.shuttleapp.rs/user`, {
         method: "POST",
         headers: new Headers({
           "Content-Type": "application/json",
@@ -275,7 +275,7 @@ const NextStep = () => {
       // const signedMessage = await signMessage(encodedMessage);
       console.log("signedMessage.toString() :: ", signedMessage);
       try {
-        fetch(`http://147.182.251.47/lanzy/setup/`, {
+        fetch(`https://xctfserver.shuttleapp.rs/lanzy/setup/`, {
           method: "POST",
           headers: new Headers({
             "Content-Type": "application/json",
