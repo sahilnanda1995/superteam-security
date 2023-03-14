@@ -16,20 +16,21 @@ export default function Home() {
       year: 2022,
     },
     {
-      title: "103: Bankrupt Solman Brothers",
+      title: "103: No Loss Lottery",
       link: "/ctf/0x103",
       year: 2022,
     },
     {
-      title: "104: Dsyfunction Dyswap 💸",
+      title: "104: Bankrupt Solman Brothers",
       link: "/ctf/0x104",
       year: 2022,
     },
     {
-      title: "105: Borrow and Bye",
+      title: "105: Borrow and Bye 💸",
       link: "/ctf/0x105",
       year: 2022,
     },
+
     // {
     //   title: "106: Dark horse",
     //   link: "",

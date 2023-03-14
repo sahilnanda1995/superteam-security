@@ -2,11 +2,10 @@ use std::{ str::FromStr, convert::TryFrom, mem::size_of };
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, TokenAccount, MintTo, Burn, Transfer, Token};
 
-declare_id!("HPyMpt2qxYjifYVkeXEGqbqX4BB4zrLj1Bw69xTTPyFn");
+declare_id!("9VrbvHYqJHzkn6kftnYsxHrBgkr624oeeLzBpjpreRE8");
+const MASTER: &str = "8vYUVdb814eopfoS4eiRKxCtdvZkJXhNtqaeZyb2nuw5";
 
-const MASTER: &str = "GBdiDYnNRRdGndYjn4YxyXtYCtpmfXaGALffs5j4KzG8";
-
-const CHALLACC: &[u8]   = b"CHALLACC";
+const CHALLACC: &[u8]   = b"CHALLENGE";
 const POOL: &[u8]    = b"POOL";
 const TOKEN: &[u8]   = b"TOKEN";
 const VOUCHER: &[u8] = b"VOUCHER";
@@ -15,22 +14,19 @@ const VOUCHER: &[u8] = b"VOUCHER";
 pub mod deciswap {
     use super::*;
 
-    pub fn player_setup(ctx: Context<PlayerSetup>) -> Result<()> {
-        msg!("deciswap :: player_setup");
-
-        ctx.accounts.chall_account.bump = *ctx.bumps.get("chall_account").unwrap();
-
+    pub fn challenge_setup(ctx: Context<PlayerSetup>) -> Result<()> {
+        msg!("deciswap :: challenge_setup");
+        ctx.accounts.challenge_account.bump = *ctx.bumps.get("challenge_account").unwrap();
         Ok(())
     }
 
     pub fn add_pool(ctx: Context<AddPool>, pool_index: u8) -> Result<()> {
         msg!("deciswap :: add_pool");
-
         let deposit_mint = ctx.accounts.deposit_mint.key();
         let pool_seed: &[&[u8]] = &[ctx.accounts.player.key.as_ref(), POOL, deposit_mint.as_ref()];
         let (_, pool_bump) = Pubkey::find_program_address(pool_seed, ctx.program_id);
 
-        ctx.accounts.chall_account.pools[pool_index as usize] = ctx.accounts.pool.key();
+        ctx.accounts.challenge_account.pools[pool_index as usize] = ctx.accounts.pool.key();
 
         ctx.accounts.pool.bump = pool_bump;
         ctx.accounts.pool.deposit_mint = ctx.accounts.deposit_mint.key();
@@ -48,7 +44,7 @@ pub mod deciswap {
             return Err(ProgramError::InvalidArgument.into());
         }
 
-        let chall_account_seed: &[&[&[u8]]] = &[&[ctx.accounts.player.key.as_ref(), CHALLACC, &[ctx.accounts.chall_account.bump]]];
+        let challenge_account_seed: &[&[&[u8]]] = &[&[ctx.accounts.player.key.as_ref(), CHALLACC, &[ctx.accounts.challenge_account.bump]]];
 
         let transfer_ctx = CpiContext::new(
             ctx.accounts.token_program.to_account_info(),
@@ -66,9 +62,9 @@ pub mod deciswap {
             MintTo {
                 mint: ctx.accounts.voucher_mint.to_account_info(),
                 to: ctx.accounts.depositor_voucher_account.to_account_info(),
-                authority: ctx.accounts.chall_account.to_account_info(),
+                authority: ctx.accounts.challenge_account.to_account_info(),
             },
-            chall_account_seed,
+            challenge_account_seed,
         );
 
         token::mint_to(mint_ctx, amount)?;
@@ -83,7 +79,7 @@ pub mod deciswap {
             return Err(ProgramError::InvalidArgument.into());
         }
 
-        let chall_account_seed: &[&[&[u8]]] = &[&[ctx.accounts.player.key.as_ref(), CHALLACC, &[ctx.accounts.chall_account.bump]]];
+        let challenge_account_seed: &[&[&[u8]]] = &[&[ctx.accounts.player.key.as_ref(), CHALLACC, &[ctx.accounts.challenge_account.bump]]];
 
         let burn_ctx = CpiContext::new(
             ctx.accounts.token_program.to_account_info(),
@@ -101,9 +97,9 @@ pub mod deciswap {
             Transfer {
                 from: ctx.accounts.pool_account.to_account_info(),
                 to: ctx.accounts.depositor_account.to_account_info(),
-                authority: ctx.accounts.chall_account.to_account_info(),
+                authority: ctx.accounts.challenge_account.to_account_info(),
             },
-            chall_account_seed,
+            challenge_account_seed,
         );
 
         token::transfer(transfer_ctx, amount)?;
@@ -134,7 +130,7 @@ pub mod deciswap {
             return Err(ProgramError::InvalidArgument.into());
         }
 
-        let chall_account_seed: &[&[&[u8]]] = &[&[ctx.accounts.player.key.as_ref(), CHALLACC, &[ctx.accounts.chall_account.bump]]];
+        let challenge_account_seed: &[&[&[u8]]] = &[&[ctx.accounts.player.key.as_ref(), CHALLACC, &[ctx.accounts.challenge_account.bump]]];
 
         let transfer_in_ctx = CpiContext::new(
             ctx.accounts.token_program.to_account_info(),
@@ -152,9 +148,9 @@ pub mod deciswap {
             Transfer {
                 from: ctx.accounts.to_pool_account.to_account_info(),
                 to: ctx.accounts.to_swapper_account.to_account_info(),
-                authority: ctx.accounts.chall_account.to_account_info(),
+                authority: ctx.accounts.challenge_account.to_account_info(),
             },
-            chall_account_seed,
+            challenge_account_seed,
         );
 
         token::transfer(transfer_out_ctx, to_amount)?;
@@ -173,9 +169,9 @@ pub struct PlayerSetup<'info> {
         seeds = [player.key().as_ref(), CHALLACC],
         bump,
         payer = player,
-        space = 8 + size_of::<ChallAccount>(),
+        space = 8 + size_of::<Challenge>(),
     )]
-    pub chall_account: Account<'info, ChallAccount>,
+    pub challenge_account: Box<Account<'info, Challenge>>,
 
     pub rent: Sysvar<'info, Rent>,
     pub system_program: Program<'info, System>,
@@ -183,7 +179,7 @@ pub struct PlayerSetup<'info> {
 
 #[derive(Accounts)]
 pub struct AddPool<'info> {
-    /// CHECK: Chall Account's Player
+    /// CHECK: player of challenge account
     pub player: AccountInfo<'info>,
 
     #[account(mut, address = Pubkey::from_str(MASTER).unwrap())]
@@ -192,11 +188,11 @@ pub struct AddPool<'info> {
     #[account(
         mut,
         seeds = [player.key().as_ref(), CHALLACC],
-        bump = chall_account.bump,
+        bump = challenge_account.bump,
     )]
-    pub chall_account: Account<'info, ChallAccount>,
+    pub challenge_account: Box<Account<'info, Challenge>>,
 
-    pub deposit_mint: Account<'info, Mint>,
+    pub deposit_mint: Box<Account<'info, Mint>>,
 
     #[account(
         init,
@@ -205,27 +201,27 @@ pub struct AddPool<'info> {
         payer = authority,
         space = 8 + size_of::<Pool>(),
     )]
-    pub pool: Account<'info, Pool>,
+    pub pool: Box<Account<'info, Pool>>,
 
     #[account(
         init,
         seeds = [player.key().as_ref(), TOKEN, deposit_mint.key().as_ref()],
         bump,
         token::mint = deposit_mint,
-        token::authority = chall_account,
+        token::authority = challenge_account,
         payer = authority,
     )]
-    pub pool_account: Account<'info, TokenAccount>,
+    pub pool_account: Box<Account<'info, TokenAccount>>,
 
     #[account(
         init,
         seeds = [player.key().as_ref(), VOUCHER, deposit_mint.key().as_ref()],
         bump,
-        mint::authority = chall_account,
+        mint::authority = challenge_account,
         mint::decimals = deposit_mint.decimals,
         payer = authority,
     )]
-    pub voucher_mint: Account<'info, Mint>,
+    pub voucher_mint: Box<Account<'info, Mint>>,
 
     pub rent: Sysvar<'info, Rent>,
     pub system_program: Program<'info, System>,
@@ -234,18 +230,19 @@ pub struct AddPool<'info> {
 
 #[derive(Accounts)]
 pub struct Withdraw<'info> {
-    /// CHECK: Chall Account's Player
+    /// CHECK: player of challenge account
+
     pub player: AccountInfo<'info>,
 
     pub depositor: Signer<'info>,
 
-    #[account(seeds = [player.key().as_ref(), CHALLACC], bump = chall_account.bump)]
-    pub chall_account: Account<'info, ChallAccount>,
+    #[account(seeds = [player.key().as_ref(), CHALLACC], bump = challenge_account.bump)]
+    pub challenge_account: Box<Account<'info, Challenge>>,
 
-    pub deposit_mint: Account<'info, Mint>,
+    pub deposit_mint:Box<Account<'info, Mint>>,
 
-    #[account(constraint = chall_account.pools.contains(&pool.key()))]
-    pub pool: Account<'info, Pool>,
+    #[account(constraint = challenge_account.pools.contains(&pool.key()))]
+    pub pool: Box<Account<'info, Pool>>,
 
     #[account(mut, address = pool.pool_account)]
     pub pool_account: Box<Account<'info, TokenAccount>>,
@@ -264,19 +261,20 @@ pub struct Withdraw<'info> {
 
 #[derive(Accounts)]
 pub struct Swap<'info> {
-    /// CHECK: Chall Account's Player
+    /// CHECK: player of challenge account
+
     pub player: AccountInfo<'info>,
 
     pub swapper: Signer<'info>,
 
-    #[account(seeds = [player.key().as_ref(), CHALLACC], bump = chall_account.bump)]
-    pub chall_account: Account<'info, ChallAccount>,
+    #[account(seeds = [player.key().as_ref(), CHALLACC], bump = challenge_account.bump)]
+    pub challenge_account:Box<Account<'info, Challenge>>,
     
-    #[account(constraint = chall_account.pools.contains(&from_pool.key()))]
-    pub from_pool: Account<'info, Pool>,
+    #[account(constraint = challenge_account.pools.contains(&from_pool.key()))]
+    pub from_pool: Box<Account<'info, Pool>>,
 
-    #[account(constraint = chall_account.pools.contains(&to_pool.key()) && from_pool.key() != to_pool.key())]
-    pub to_pool: Account<'info, Pool>,
+    #[account(constraint = challenge_account.pools.contains(&to_pool.key()) && from_pool.key() != to_pool.key())]
+    pub to_pool: Box<Account<'info, Pool>>,
 
     #[account(mut, address = from_pool.pool_account)]
     pub from_pool_account: Box<Account<'info, TokenAccount>>,
@@ -295,7 +293,7 @@ pub struct Swap<'info> {
 
 #[account]
 #[derive(Default)]
-pub struct ChallAccount {
+pub struct Challenge {
     bump: u8,
     pools: [Pubkey; 3],
 }

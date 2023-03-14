@@ -3,7 +3,7 @@ seeds = false
 skip-lint = false
 
 [programs.devnet]
-deciswap = "9VrbvHYqJHzkn6kftnYsxHrBgkr624oeeLzBpjpreRE8"
+winlot = "AhaFf2P9e1HqsZwgJmGr2svBGBk3JQz8iCpN7VG1QU9Q"
 
 [registry]
 url = "https://api.apr.dev"

@@ -76,6 +76,8 @@ export default function Home() {
         method: "POST",
         headers: new Headers({
           "Content-Type": "application/json",
+          // "Access-Control-Allow-Origin": "*"
+          
         }),
         body: JSON.stringify({
           pubkey: signedMessage.publicKey,
@@ -432,7 +434,17 @@ const NextStep = () => {
               >
                 Reset Mission
               </button>
-              {deployLoader ? (
+            </div>
+          </>
+        ) : (
+          <div>
+            <button
+              onClick={deployNewInstance}
+              className="mt-8 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              Commence Mission
+            </button>
+            {deployLoader ? (
                 <div
                   className="inline-block ml-4 h-4 w-4 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
                   role="status"
@@ -444,16 +456,6 @@ const NextStep = () => {
               ) : (
                 <></>
               )}
-            </div>
-          </>
-        ) : (
-          <div>
-            <button
-              onClick={deployNewInstance}
-              className="mt-8 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            >
-              Commence Mission
-            </button>
           </div>
         )}
       </div>

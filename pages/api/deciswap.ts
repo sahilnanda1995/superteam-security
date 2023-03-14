@@ -4,17 +4,17 @@ import path from "path";
 import archiver from "archiver";
 import fs from "fs";
 
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   const dir = path.resolve("ctfs/deciswap");
+try {
 
   if (req.method === 'POST') {
     let parseBody = JSON.parse(req.body);
-    // Add user.keypair
-    fs.writeFileSync(`${dir}/keys/player.json`, JSON.stringify(parseBody.player));
+    
+    fs.writeFileSync(`${dir}/keys/pubkeys.json`, JSON.stringify(parseBody));
     res.status(200).json({ status: "Done" });
 
   } else if (req.method === 'GET') {
@@ -30,4 +30,8 @@ export default async function handler(
     zip.directory(dir, "deciswap");
     zip.finalize();
   }  
+} catch (e) {
+  console.log(`error :: ${e}`);
+  
+}
 }

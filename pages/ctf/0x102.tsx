@@ -18,7 +18,7 @@ import { SelectAndConnectWalletButton } from "../../components/SelectAndConnectW
 import { useWallet } from "@solana/wallet-adapter-react";
 import dynamic from "next/dynamic";
 import Router from "next/router";
-import { PgCommon } from "../../utils/common";
+import { PgCommon, SERVER_URL } from "../../utils/common";
 
 const downloadSourceCode = async () => {
   console.log("downloading ....");
@@ -85,7 +85,8 @@ export default function Home() {
     console.log("signedMessage.toString() :: ", signedMessage);
 
     try {
-      fetch(`https://xctfserver.shuttleapp.rs/user`, {
+      // fetch(`https://xctfserver.shuttleapp.rs/user`, {
+      fetch(`${SERVER_URL}/user`, {
         method: "POST",
         headers: new Headers({
           "Content-Type": "application/json",
@@ -275,7 +276,7 @@ const NextStep = () => {
       // const signedMessage = await signMessage(encodedMessage);
       console.log("signedMessage.toString() :: ", signedMessage);
       try {
-        fetch(`https://xctfserver.shuttleapp.rs/lanzy/setup/`, {
+        fetch(`${SERVER_URL}/lanzy/setup/`, {
           method: "POST",
           headers: new Headers({
             "Content-Type": "application/json",

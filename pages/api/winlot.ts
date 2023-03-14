@@ -1,15 +1,16 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import path from "path";
 import archiver from "archiver";
 import fs from "fs";
 
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  try {
-  const dir = path.resolve("ctfs/flash-loan");
+  const dir = path.resolve("ctfs/winlot");
+try {
+
   if (req.method === 'POST') {
     let parseBody = JSON.parse(req.body);
     
@@ -18,7 +19,7 @@ export default async function handler(
 
   } else if (req.method === 'GET') {
     res.setHeader("Content-Type", "application/zip");
-    res.setHeader("Content-Disposition", "attachment; filename=flash-loan.zip");
+    res.setHeader("Content-Disposition", "attachment; filename=winlot.zip");
 
     const zip = archiver("zip");
     
@@ -26,7 +27,7 @@ export default async function handler(
       throw err;
     });
     zip.pipe(res);
-    zip.directory(dir, "flash-loan");
+    zip.directory(dir, "winlot");
     zip.finalize();
   }  
 } catch (e) {

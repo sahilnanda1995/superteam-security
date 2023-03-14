@@ -3,33 +3,125 @@ import { Header } from "../../components/Header";
 // web3 stuff import
 import * as anchor from "@project-serum/anchor";
 import { Program } from "@project-serum/anchor";
-// import { HelloSupersec, IDL } from "../../IDLs/HelloSupersec";
-import { HelloSupersec, IDL } from "../../IDLs/hello_supersec";
-
+import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import { useConnection } from "@solana/wallet-adapter-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { PgWallet } from "../../utils/wallet";
+import { getLs } from "../../utils/wallet";
 import Footer from "../../components/Footer";
+import { useWallet } from "@solana/wallet-adapter-react";
+import dynamic from "next/dynamic";
+import Router from "next/router";
+import { PgCommon, SERVER_URL } from "../../utils/common";
+
+import { Deciswap, IDL } from "../../IDLs/deciswap";
 
 const downloadSourceCode = async () => {
   console.log("downloading ....");
-  
-  const response = await fetch("/api/dyswap", {
+
+  let accounts = localStorage.getItem("ctf-deciswap");
+  let game_wallet = localStorage.getItem("wallet");
+  if (accounts) {
+    let parse_accounts = JSON.parse(accounts);
+    if (parse_accounts.account) {
+      accounts = parse_accounts.account
+    }
+  }
+   
+  const response = await fetch("/api/deciswap", {
     method: "POST",
     body: JSON.stringify({
-      player: PgWallet.getLs()?.sk,
+        player: JSON.parse(game_wallet!).sk,
+        accounts: accounts,
     }),
-  })
-  if (response.status === 200 ) {
-    window.open("/api/dyswap", "_blank")
+  });
+  if (response.status === 200) {
+    window.open("/api/deciswap", "_blank");
   }
 };
 
+const WalletMultiButtonDynamic = dynamic(
+  async () =>
+    (await import("@solana/wallet-adapter-react-ui")).WalletMultiButton,
+  { ssr: false }
+);
+
 export default function Home() {
+  // const [gameWallet, setGameWallet] = useState(false);
+  const gameWallet = getLs();
+  const wallet = useWallet();
+
+  async function createGameWallet() {
+    console.log("Create game wallet ...");
+
+    if (!wallet.publicKey) {
+      console.log("Connecting");
+      await wallet.connect();
+    }
+
+    console.log("wallet :: ", wallet.publicKey);
+
+    const message = `Sign-up me for CTF 
+    Click Sign or Approve only means you have proved this wallet is owned by you.`;
+
+    const encodedMessage = new TextEncoder().encode(message);
+
+    if (!wallet.signMessage)
+      throw new Error("Wallet does not support message signing!");
+
+    const signedMessage = await (window as any).solana.request({
+      method: "signMessage",
+      params: {
+        message: encodedMessage,
+        display: "utf8", //hex,utf8
+      },
+    });
+
+    // const signedMessage = await signMessage(encodedMessage);
+    console.log("signedMessage.toString() :: ", signedMessage);
+
+    try {
+      // fetch(`https://xctfserver.shuttleapp.rs/user`, {
+      fetch(`${SERVER_URL}/user`, {
+        method: "POST",
+        headers: new Headers({
+          "Content-Type": "application/json",
+        }),
+        body: JSON.stringify({
+          pubkey: signedMessage.publicKey,
+          sig: signedMessage.signature,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("data :: ", data);
+          if (data) {
+            if (data.game_wallet === "null") {
+              console.log("Not found, need to create game wallet first");
+            }
+          }
+          // setData(data)
+          // localStorage.setItem("wallet", JSON.stringify(data.game_wallet));
+          localStorage.setItem(
+            "wallet",
+            JSON.stringify({
+              connected: true,
+              sk: data.game_wallet,
+            })
+          );
+          // gameWallet.reload()
+          Router.reload();
+
+          // setLoading(false)
+        });
+    } catch (error) {
+      console.log("error, error");
+    }
+  }
+
   return (
     <div className="px-4 sm:px-0 max-w-4xl m-auto">
       <Head>
@@ -42,30 +134,34 @@ export default function Home() {
 
       <main className="relative pt-8 pb-3 px-2 sm:px-0">
         <div className="py-3">
-          <div className="text-[#2bbc8a]"> CTF::0x104::DySwap</div>
+        <div className="text-[#2bbc8a]"> CTF::0x104::Solman Brothers</div>
 
-
-          {/* CTFs
-                    - Introduction
-                    - Instruction
-                    - KeepInMind
-            */}
-          <div className="mt-8">
-            Hello,
-          </div>
+          <div className="mt-8">Hello,</div>
 
           <div className="mt-4">
-            Your mission is to hack Dyswap: a dsyfunctional exchange inspired by Uniswap v2.
-            <br></br> 
+            Your mission is to hack Solman Brothers - a bank that stores various forms of Solana in different vaults. 
+            <br></br>
+            Currently it has 3 vaults storing $1M worth of wormhole-wrapped SOL, sollet-wrapped SOL and lido-staked SOL respectively. 
+            <br></br>
+            Steal half of the money to capture the flag! 
           </div>
+
 
           <div className="mt-4">
             To start hacking:
             <div className="mt-4 ml-2">
               <ol className="list-disc ml-4">
-                <li>
-                  Download the source code after clicking on commence mission
-                </li>
+                {gameWallet.connected ? (
+                  <li>
+                    Download the source code after clicking on commence mission
+                  </li>
+                ) : (
+                  <li>
+                    Create Game Wallet and then download the source code after
+                    clicking on commence mission
+                  </li>
+                )}
+
                 <li>
                   Noob to CTF&apos;s? We got you:{" "}
                   <Link href="/guides/101">
@@ -75,19 +171,36 @@ export default function Home() {
               </ol>
             </div>
           </div>
-          <NextStep />
+
+          {wallet.connected ? (
+            gameWallet.connected ? (
+              <NextStep />
+            ) : (
+              <div>
+                <button
+                  onClick={createGameWallet}
+                  className="mt-8 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                  Create game wallet
+                </button>
+              </div>
+            )
+          ) : (
+            <div className="mt-8">
+              <WalletMultiButtonDynamic />
+            </div>
+          )}
         </div>
       </main>
-
       <Footer />
-
     </div>
   );
 }
 
 const NextStep = () => {
-  // const wallet = useAnchorWallet();
-  const wallet = new PgWallet();
+  const gameWallet = getLs();
+  const wallet = useWallet();
+  const anchorWallet = useAnchorWallet();
 
   const { connection } = useConnection();
   const [open, setOpen] = useState(false);
@@ -98,28 +211,35 @@ const NextStep = () => {
   const [pawned, setPawned] = useState<boolean>(false);
   const [getFlagA, setGetFlagA] = useState<boolean>(false);
 
+  // const [data, setData] = useState(null);
+  const [isStateReady, setStateReady] = useState(false);
+  const [deployLoader, setdeployLoader] = useState(false);
+  const [getFlagLoader, setgetFlagLoader] = useState(false);
+
   const isInstanceDeployed = useCallback(async () => {
     console.log("Checking if user've already deployed instance");
 
     const signer = wallet.publicKey;
+    if (!signer || !anchorWallet) throw new Error("Signer doesn't exist");
 
-    const provider = new anchor.AnchorProvider(connection, wallet, {
+    const provider = new anchor.AnchorProvider(connection, anchorWallet, {
       preflightCommitment: "recent",
       commitment: "processed",
     });
+
     const program = new anchor.Program(
       IDL,
       IDL.metadata.address,
       provider
-    ) as Program<HelloSupersec>;
+    ) as Program<Deciswap>;
 
-    const [challPubkey, _] = await anchor.web3.PublicKey.findProgramAddress(
-      [Buffer.from("STATE"), signer.toBuffer()],
+    const [challPubkey, _] = anchor.web3.PublicKey.findProgramAddressSync(
+      [gameWallet.publicKey.toBuffer(), Buffer.from("CHALLENGE")],
       program.programId
     );
 
     try {
-      const tx = await program.account.challAccount.fetch(challPubkey);
+      const tx = await program.account.challenge.fetch(challPubkey);
       if (tx) {
         setisInstanceDeployedState(true);
       } else {
@@ -128,172 +248,211 @@ const NextStep = () => {
     } catch (e) {
       console.log(e);
     }
-  }, [connection]);
+    setStateReady(true);
+  }, [anchorWallet, connection, wallet.publicKey]);
 
   async function deployNewInstance() {
     console.log("Deploying");
-    setisInstanceDeployedState(true);
+    setdeployLoader(true);
 
-    // if (wallet) {
-    //   const signer = wallet.publicKey;
+    if (anchorWallet?.publicKey) {
+      // Airdrop some sol
+      const airdropTxHash = await connection.requestAirdrop(
+        gameWallet.publicKey,
+        PgCommon.solToLamports(1)
+      );
+      console.log(`Airdrop txHash :: ${airdropTxHash}`);
 
-    //   const provider = new anchor.AnchorProvider(connection, wallet, {
-    //     preflightCommitment: "recent",
-    //     commitment: "processed",
-    //   });
-    //   const program = new anchor.Program(
-    //     IDL,
-    //     IDL.metadata.address,
-    //     provider
-    //   ) as Program<HelloSupersec>;
+      const message = `Setup Deciswap Challanage. Click Sign or Approve only means you have proved this wallet is owned by you.`;
 
-    //   const txx = await program.methods.playeSetup();
-    //   const autoInferKey = await txx.pubkeys();
+      const encodedMessage = new TextEncoder().encode(message);
 
-    //   console.log("chall :: ", autoInferKey.state?.toString());
-    //   console.log("depositAccount :: ", autoInferKey.depositAccount?.toString());
-    //   console.log("voucherMint :: ", autoInferKey.voucherMint?.toString());
-    //   console.log("depositMint :: ", autoInferKey.depositMint?.toString());
-
-
-    //   const tx = await program.methods.playeSetup().accounts({
-    //     player: signer,
-    //   });
-
-    //   const txHash = await tx.rpc();
-    //   console.log("txHash :: ", txHash);
-
-    //   const confirmTx = await connection.getSignatureStatus(txHash);
-    //   console.log("Tx status :: ", confirmTx);
-
-    //   if (confirmTx.value?.confirmationStatus === "confirmed") {
-    //     setisInstanceDeployedState(true);
-    //   }
-    // }
-  }
-
-  const removeInstance = async () => {
-    if (wallet) {
-      const signer = wallet.publicKey;
-
-      const provider = new anchor.AnchorProvider(connection, wallet, {
-        preflightCommitment: "recent",
-        commitment: "processed",
+      if (!wallet.signMessage)
+        throw new Error("Wallet does not support message signing!");
+      const signedMessage = await (window as any).solana.request({
+        method: "signMessage",
+        params: {
+          message: encodedMessage,
+          display: "utf8", //hex,utf8
+        },
       });
-      const program = new anchor.Program(
-        IDL,
-        IDL.metadata.address,
-        provider
-      ) as Program<HelloSupersec>;
 
-      const tx = await program.methods
-        .close()
-        .accounts({
-          signer: signer,
+      // const signedMessage = await signMessage(encodedMessage);
+      console.log("signedMessage.toString() :: ", signedMessage);
+      try {
+        fetch(`${SERVER_URL}/deciswap/setup/`, {
+          method: "POST",
+          headers: new Headers({
+            "Content-Type": "application/json",
+          }),
+          body: JSON.stringify({
+            pubkey: signedMessage.publicKey,
+            sig: signedMessage.signature,
+          }),
         })
-        .rpc();
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("data :: ", data);
+            if (data) {
+              // if (data.game_wallet === 'null') {
+              console.log("data :: ", data);
+              localStorage.setItem("ctf-deciswap", JSON.stringify(data));
+              setisInstanceDeployedState(true);
+              setdeployLoader(false);
 
-      console.log("txHash :: ", tx);
-
-      const confirmTx = await connection.getSignatureStatus(tx);
-      console.log("Tx status :: ", confirmTx);
-
-      if (confirmTx.value?.confirmationStatus === "confirmed") {
-        setisInstanceDeployedState(false);
+              // }
+            }
+            // setData(data)
+            // setLoading(false)
+          });
+      } catch (error) {
+        console.log("error :: ", error);
+        setdeployLoader(false);
       }
     }
-  };
+  }
 
   const getFlag = async () => {
-    setGetFlagA(true);
+    setgetFlagLoader(true);
     console.log("Checking if user pawned it or not");
 
     if (wallet) {
       const signer = wallet.publicKey;
+      if (!signer || !anchorWallet) throw new Error("Signer doesn't exist");
 
-      const provider = new anchor.AnchorProvider(connection, wallet, {
+      const provider = new anchor.AnchorProvider(connection, anchorWallet, {
         preflightCommitment: "recent",
         commitment: "processed",
       });
+
       const program = new anchor.Program(
         IDL,
         IDL.metadata.address,
         provider
-      ) as Program<HelloSupersec>;
+      ) as Program<Deciswap>;
 
-      const [challPubkey, _] = await anchor.web3.PublicKey.findProgramAddress(
-        [Buffer.from("hello-supersec"), signer.toBuffer()],
-        program.programId
-      );
+      let accounts = JSON.parse(localStorage.getItem("ctf-deciswap")!);
+
+      console.log(accounts);
+
+      const ms_pool = new anchor.web3.PublicKey(accounts.account.ms_pool_account);
+      const st_pool = new anchor.web3.PublicKey(accounts.account.st_pool_account);
+      const wo_pool = new anchor.web3.PublicKey(accounts.account.wo_pool_account);
+
+      console.log(ms_pool);
+      console.log(st_pool);
+      console.log(wo_pool);
+
 
       try {
-        const tx = await program.account.challAccount.fetch(challPubkey);
-        if (tx.pawned === true) {
+        const ms_pool_balance = await program.provider.connection.getTokenAccountBalance(ms_pool);
+        const st_pool_balance = await program.provider.connection.getTokenAccountBalance(st_pool);
+        const wo_pool_balance = await program.provider.connection.getTokenAccountBalance(wo_pool);
+
+        console.log("ms_pool_balance :: ", ms_pool_balance);
+        console.log("st_pool_balance :: ", st_pool_balance);
+        console.log("wo_pool_balance :: ", wo_pool_balance);
+
+        if (ms_pool_balance.value.amount === "0" && st_pool_balance.value.amount === "0" && wo_pool_balance.value.amount === "0") {
           setPawned(true);
           setOpen(true);
         } else {
           console.log("Need to grind more ser!");
           setOpen(true);
         }
+        setgetFlagLoader(false);
       } catch (e) {
         console.log(e);
+        setgetFlagLoader(false);
       }
     }
   };
 
   useEffect(() => {
-    isInstanceDeployed();
+    try {
+      isInstanceDeployed();
+    } catch (error) {
+      console.log("error, error");
+    }
   }, [isInstanceDeployed]);
 
   return (
     <>
-      <div>
-        {isInstanceDeployedState ? (
-          <>
-            {pawned ? (
-              <div>Wow, you did it</div>
-            ) : (
-              <div className="mt-4">
-                Mission is started:{" "}
-                <a
-                  className="text-blue"
-                  onClick={(e) => {
-                    downloadSourceCode()
-                  }}
-                >
-                  download the source code
-                </a>{" "}
-                cadet!
-              </div>
-            )}
+      {isStateReady ? (
+        <div>
+          {isInstanceDeployedState ? (
+            <>
+              {pawned ? (
+                <div>Wow, you did it</div>
+              ) : (
+                <div className="mt-4">
+                  Mission is started:{" "}
+                  <a
+                    className="text-blue"
+                    onClick={(e) => {
+                      downloadSourceCode();
+                    }}
+                  >
+                    download the source code
+                  </a>{" "}
+                  cadet!
+                </div>
+              )}
 
+              <div>
+                <button
+                  onClick={getFlag}
+                  className="mt-8 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                  Get My Flag
+                </button>
+                {getFlagLoader ? (
+                <div
+                  className="inline-block ml-4 h-4 w-4 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                  role="status"
+                >
+                  <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                    checking ...
+                  </span>
+                </div>
+              ) : (
+                <></>
+              )}
+
+                {/* <button
+              onClick={removeInstance}
+              className="ml-8 mt-8 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              Reset Mission
+            </button> */}
+              </div>
+            </>
+          ) : (
             <div>
               <button
-                onClick={getFlag}
+                onClick={deployNewInstance}
                 className="mt-8 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
-                Get My Flag
+                Commence Mission
               </button>
-
-              <button
-                onClick={removeInstance}
-                className="ml-8 mt-8 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-              >
-                Reset Mission
-              </button>
+              {deployLoader ? (
+                <div
+                  className="inline-block ml-4 h-4 w-4 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                  role="status"
+                >
+                  <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                    Loading...
+                  </span>
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
-          </>
-        ) : (
-          <div>
-            <button
-              onClick={deployNewInstance}
-              className="mt-8 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            >
-              Commence Mission
-            </button>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      ) : (
+        <div></div>
+      )}
 
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={setOpen}>

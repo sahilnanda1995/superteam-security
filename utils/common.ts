@@ -3,6 +3,9 @@ import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 export const EXPLORER_URL = "https://explorer.solana.com";
 export const SOLSCAN_URL = "https://solscan.io";
 
+// export const SERVER_URL = "http://localhost:3000";
+export const SERVER_URL = "https://xctfserver.shuttleapp.rs";
+
 export enum Endpoint {
   DEVNET = "https://api.devnet.solana.com",
   DEVNET_GENESYSGO = "https://devnet.genesysgo.net/",
