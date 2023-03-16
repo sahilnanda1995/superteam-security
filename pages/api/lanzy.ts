@@ -8,7 +8,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const dir = path.resolve("public/ctfs/lanzy");
+  const dir = path.resolve("ctfs/lanzy");
   console.log("dir :: ", dir);
   
   try {
