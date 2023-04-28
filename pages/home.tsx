@@ -21,7 +21,7 @@ const protocols = [
     amount: 48000000,
     doh: "349312",
     technique: "Faulty Account Validation",
-    audit_by: "Unaudited",
+    audit_by: "Brahma Systems",
   },
   {
     name: "Cashio",
@@ -39,7 +39,7 @@ const protocols = [
     amount: 48000000,
     doh: "349312",
     technique: "Faulty Account Validation",
-    audit_by: "Unaudited",
+    audit_by: "Brahma Systems",
   },
   {
     name: "Cashio",
@@ -48,34 +48,7 @@ const protocols = [
     amount: 48000000,
     doh: "349312",
     technique: "Faulty Account Validation",
-    audit_by: "Unaudited",
-  },
-  {
-    name: "Cashio",
-    title: "Concentrated Liquidity Provider",
-    exploit_type: "Faulty Account Validation",
-    amount: 48000000,
-    doh: "349312",
-    technique: "Private Key compromised(Stored Publicly) on Sentry Server",
-    audit_by: "Unaudited",
-  },
-  {
-    name: "Cashio",
-    title: "Stable Coin",
-    exploit_type: "Faulty Account Validation",
-    amount: 48000000,
-    doh: "349312",
-    technique: "Faulty Account Validation",
-    audit_by: "Unaudited",
-  },
-  {
-    name: "Cashio",
-    title: "Concentrated Liquidity Provider",
-    exploit_type: "Faulty Account Validation",
-    amount: 48000000,
-    doh: "349312",
-    technique: "Faulty Account Validation",
-    audit_by: "Unaudited",
+    audit_by: "Brahma Systems",
   },
   {
     name: "Cashio",
@@ -96,7 +69,7 @@ export default function Home() {
         alt="bg_img"
         src="/assets/bg_img.svg"
         fill
-        className="absolute inset-0 -z-10 h-full w-full object-cover -mt-96 sm:-mt-80 lg:-mt-96"
+        className="fixed inset-0 -z-10 h-full w-full object-cover -mt-10 sm:-mt-80 lg:-mt-56"
       />
       <div className="flex min-h-screen flex-col py-8 lg:py-10 px-6 lg:px-[72px]">
         <nav className="flex items-center justify-between" aria-label="Global">
@@ -141,22 +114,22 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="bg-gradient-to-r from-home-tab-head via-home-green to-home-tab-head rounded-lg">
+        <div className="hidden sm:flex bg-gradient-to-r from-home-tab-head via-home-green to-home-tab-head rounded-lg">
           <table className="min-w-full mt-[0.5px] rounded-lg overflow-hidden">
-            <thead className="bg-home-tab-head">
+            <thead className="bg-home-tab-head hidden sm:table-row-group">
               <tr>
                 <th scope="col" className="px-6 py-4 text-left text-sm">
                   protocol
                 </th>
                 <th
                   scope="col"
-                  className="hidden px-6 py-4 whitespace-nowrap text-left text-sm lg:table-cell"
+                  className="px-6 py-4 whitespace-nowrap text-left text-sm"
                 >
                   date of hack
                 </th>
                 <th
                   scope="col"
-                  className="hidden px-6 py-4 text-left text-sm sm:table-cell"
+                  className="hidden px-6 py-4 text-left text-sm lg:table-cell"
                 >
                   $ stolen
                 </th>
@@ -166,7 +139,10 @@ export default function Home() {
                 >
                   exploit type
                 </th>
-                <th scope="col" className="px-6 py-4 text-left text-sm">
+                <th
+                  scope="col"
+                  className="hidden px-6 py-4 text-left text-sm lg:table-cell"
+                >
                   technique
                 </th>
                 <th
@@ -183,28 +159,45 @@ export default function Home() {
                   key={index}
                   className="hover:bg-home-tab-head cursor-pointer divide-x divide-home-tab-head"
                 >
-                  <td className="px-6 py-6 text-sm font-medium">
-                    {protocol.name}
-                    <dl className="">
-                      {/* <dt className="sr-only">Title</dt> */}
-                      <dd className="mt-1 text-home-tab-title">
+                  <td className="px-6 py-6 text-sm">
+                    <div className="flex flex-col">
+                      <div className="flex flex-row space-x-2 items-center">
+                        <div>{protocol.name}</div>
+                        <div className="bg-home-tab-head px-2 py-1 rounded-lg lg:hidden">
+                          {protocol.amount}
+                        </div>
+                      </div>
+                      <div className="text-home-tab-title mt-2">
                         {protocol.title}
-                      </dd>
-                      {/* <dt className="sr-only sm:hidden">Email</dt> */}
-                      {/* <dd className="mt-1 truncate text-gray-500 sm:hidden">
-                        {protocol.email}
-                      </dd> */}
-                    </dl>
+                      </div>
+                      <div className="mt-2 sm:hidden">
+                        {protocol?.audit_by !== "Unaudited"
+                          ? "Audited by " + protocol.audit_by
+                          : "Unaudited"}
+                      </div>
+                      <div className="bg-home-tab-exp-bg p-4 mt-4 rounded-lg sm:hidden">
+                        <div className="text-xs text-home-tab-exp-subtxt tracking-widest">
+                          EXPLOIT TYPE
+                        </div>
+                        <div className="mt-2 text-home-tab-exp-txt">
+                          {protocol.exploit_type}
+                        </div>
+                      </div>
+                    </div>
                   </td>
-                  <td className="hidden px-6 py-3 text-sm lg:table-cell">
+                  <td className="px-6 py-3 text-sm hidden sm:table-cell">
                     {protocol.doh}
                   </td>
-                  <td className="hidden px-6 py-3 text-sm sm:table-cell">
+                  <td className="hidden px-6 py-3 text-sm lg:table-cell">
                     {protocol.amount}
                   </td>
-                  <td className="px-6 py-3 text-sm">{protocol.exploit_type}</td>
-                  <td className="px-6 py-3 text-sm">{protocol.technique}</td>
-                  <td className="px-6 py-3 text-sm italic">
+                  <td className="px-6 py-3 text-sm hidden sm:table-cell">
+                    {protocol.exploit_type}
+                  </td>
+                  <td className="hidden px-6 py-3 text-sm lg:table-cell">
+                    {protocol.technique}
+                  </td>
+                  <td className="px-6 py-3 text-sm italic hidden sm:table-cell">
                     {protocol.audit_by}
                   </td>
                 </tr>
@@ -212,7 +205,86 @@ export default function Home() {
             </tbody>
           </table>
         </div>
-        <footer className="mb-2 hidden flex-1 place-items-end justify-center text-white sm:flex 2xl:mb-4"></footer>
+        <div className="sm:hidden flex flex-col items-center justify-center space-y-8">
+          {protocols.map((protocol, index) =>
+            index === 0 ? (
+              <div
+                key={index}
+                className="bg-gradient-to-r from-home-tab-head via-home-green to-home-tab-head w-full rounded-lg"
+              >
+                <div className="hover:bg-home-tab-head bg-home-bg w-full rounded-lg border border-home-tab-head cursor-pointer divide-x divide-home-tab-head mt-[0.5px]">
+                  <div className="px-6 py-6 text-sm">
+                    <div className="flex flex-col">
+                      <div className="flex flex-row space-x-2 items-center">
+                        <div>{protocol.name}</div>
+                        <div className="bg-home-tab-head px-2 py-1 rounded-lg lg:hidden">
+                          {protocol.amount}
+                        </div>
+                      </div>
+                      <div className="text-home-tab-title mt-2">
+                        {protocol.title}
+                      </div>
+                      <div className="mt-2 sm:hidden">
+                        {protocol?.audit_by !== "Unaudited"
+                          ? "Audited by " + protocol.audit_by
+                          : "Unaudited"}
+                      </div>
+                      <div className="bg-home-tab-exp-bg p-4 mt-4 rounded-lg sm:hidden">
+                        <div className="text-xs text-home-tab-exp-subtxt tracking-widest">
+                          EXPLOIT TYPE
+                        </div>
+                        <div className="mt-2 text-home-tab-exp-txt">
+                          {protocol.exploit_type}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div
+                key={index}
+                className="hover:bg-home-tab-head bg-home-bg w-full rounded-lg border border-home-tab-head cursor-pointer divide-x divide-home-tab-head"
+              >
+                <div className="px-6 py-6 text-sm">
+                  <div className="flex flex-col">
+                    <div className="flex flex-row space-x-2 items-center">
+                      <div>{protocol.name}</div>
+                      <div className="bg-home-tab-head px-2 py-1 rounded-lg lg:hidden">
+                        {protocol.amount}
+                      </div>
+                    </div>
+                    <div className="text-home-tab-title mt-2">
+                      {protocol.title}
+                    </div>
+                    <div className="mt-2 sm:hidden">
+                      {protocol?.audit_by !== "Unaudited"
+                        ? "Audited by " + protocol.audit_by
+                        : "Unaudited"}
+                    </div>
+                    <div className="bg-home-tab-exp-bg p-4 mt-4 rounded-lg sm:hidden">
+                      <div className="text-xs text-home-tab-exp-subtxt tracking-widest">
+                        EXPLOIT TYPE
+                      </div>
+                      <div className="mt-2 text-home-tab-exp-txt">
+                        {protocol.exploit_type}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+          )}
+        </div>
+        <footer className="flex flex-col items-center text-home-green mt-10 text-sm">
+          <div className="text-center bg-home-tab-head p-6 rounded-lg">
+            <div>
+              proudly built by findsignal studio.
+              <span className="absolute text-xs -ml-1 -mt-1">FS</span>
+            </div>
+            <div>designed by @pragdua</div>
+          </div>
+        </footer>
       </div>
     </div>
   );

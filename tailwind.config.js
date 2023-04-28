@@ -12,6 +12,9 @@ module.exports = {
         serif: ["Archivo", ...defaultTheme.fontFamily.serif],
         mono: ["JetBrainsMono", "menlo", ...defaultTheme.fontFamily.mono],
       },
+      fontSize: {
+        xs: ["10px", "13px"],
+      },
       colors: {
         "sec-green": "#2bbc8a",
         "sec-text": "#e1e2e3",
@@ -27,6 +30,10 @@ module.exports = {
         "home-green": "#98DA8D",
         "home-tab-head": "#1D1D1D",
         "home-tab-title": "#636363",
+        "home-tab-amt": "#999999",
+        "home-tab-exp-bg": "#272727",
+        "home-tab-exp-txt": "#C2C2C2",
+        "home-tab-exp-subtxt": "#909090",
       },
       keyframes: {
         typing: {
