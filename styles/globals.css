@@ -81,6 +81,11 @@ code {
 	text-align: center;
 }
 
+.stretch-semi {
+  font-family: 'Archivo', sans-serif;
+  font-stretch: semi-expanded;
+}
+
 .line {
   height: 0;
   border: 1px solid #2bbc8a;
