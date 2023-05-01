@@ -72,6 +72,11 @@ a:hover {
   color: #a7a7a7;
 }
 
+.ctf-bg {
+  background-image: url('/public/assets/ctf_bg.svg');
+  background-repeat: repeat;
+}
+
 code {
 	padding: 1px 4px;
 	background-color: rgba(136, 138, 141, 0.4);
