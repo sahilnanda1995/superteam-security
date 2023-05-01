@@ -9,7 +9,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        serif: ["Archivo", ...defaultTheme.fontFamily.serif],
+        sans: ["Archivo", "Inter", ...defaultTheme.fontFamily.sans],
         mono: ["JetBrainsMono", "menlo", ...defaultTheme.fontFamily.mono],
       },
       fontSize: {

@@ -96,7 +96,7 @@ export default function Home() {
               width={52}
             />
             <div className="flex w-full justify-center">
-              <h1 className="text-[32px] leading-9 text-white font-serif stretch-semi">
+              <h1 className="text-[32px] leading-9 text-white font-sans stretch-semi">
                 solana exploits
                 <br />
                 for security nerds
