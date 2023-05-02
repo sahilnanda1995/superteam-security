@@ -55,7 +55,7 @@ export default function Footer() {
   console.log("PgWallet :: ", pgWallet.publicKey.toBase58());
 
   return (
-    <div className="max-w-4xl m-auto">
+    <div className="">
       {/* CTF Wallet */}
       <footer className="left-0 right-0 w-full text-white bg-[#242424] text-base font-['JetBrains_Mono'] p-3 rounded font-bold ">
         <div className="mx-2 h-3 w-3 rounded-full inline-block bg-green-600"></div>

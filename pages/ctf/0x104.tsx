@@ -132,7 +132,7 @@ export default function Home() {
       >
         &lt; CTFs
       </Link>
-      <div className="sm:px-0 max-w-2xl">
+      <div className="max-w-2xl flex flex-col w-full">
         <Head>
           <title>SuperSec</title>
           <meta name="description" content="Solana CTFs" />
