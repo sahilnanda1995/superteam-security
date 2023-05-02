@@ -72,10 +72,13 @@ export default function CTF() {
             <p className="text-sm text-home-tab-title">
               Not Sure Where to Start?
             </p>
-            <p className="text-xl">Beginner guide to CTF's on Solana</p>
+            <p className="text-xl">Beginner guide to CTF&apos;s on Solana</p>
           </div>
           {ctfs.map((ctf, index) => (
-            <div className="p-6 space-y-2 w-full text-white text-left bg-home-bg border border-ctf-bodr rounded-lg">
+            <div
+              className="p-6 space-y-2 w-full text-white text-left bg-home-bg border border-ctf-bodr rounded-lg"
+              key={index}
+            >
               <p className="text-sm text-home-tab-title">{ctf.id}</p>
               onClick={} <p className="text-xl">{ctf.title}</p>
               <button

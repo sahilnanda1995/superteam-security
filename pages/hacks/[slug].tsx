@@ -142,7 +142,6 @@ export default function BlogPage({ frontMatter, content }: any) {
           /> */}
           <ReactMarkdown
             className="prose font-['Inter'] prose-headings:font-['JetBrains_Mono'] max-w-xl prose-headings:text-home-neon"
-            children={content}
             remarkPlugins={[remarkGfm, remarkToc, remarkSlug]}
             // renderers={renderers}
             // pluginsOptions={{
@@ -150,7 +149,9 @@ export default function BlogPage({ frontMatter, content }: any) {
             //     heading: "Contents",
             //   },
             // }}
-          />
+          >
+            {content}
+          </ReactMarkdown>
         </div>
         <footer className="flex flex-col items-center text-home-green mt-10 text-sm">
           <div className="text-center bg-home-tab-head p-6 rounded-lg">

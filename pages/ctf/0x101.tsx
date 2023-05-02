@@ -171,9 +171,9 @@ export default function Home() {
                   )}
                   <li>
                     Noob to CTF&apos;s? We got you:{" "}
-                    <a href="/guides/101" className="underline">
+                    <Link href="/guides/101" className="underline">
                       beginner guide to CTF&apos;s on Solana
-                    </a>
+                    </Link>
                   </li>
                 </ol>
               </div>
