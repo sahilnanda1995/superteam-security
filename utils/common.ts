@@ -4,7 +4,8 @@ export const EXPLORER_URL = "https://explorer.solana.com";
 export const SOLSCAN_URL = "https://solscan.io";
 
 // export const SERVER_URL = "http://localhost:3000";
-export const SERVER_URL = "https://xctfserver.shuttleapp.rs";
+export const SERVER_URL =
+  "https://corsproxy.io/?https://xctfserver.shuttleapp.rs";
 
 export enum Endpoint {
   DEVNET = "https://api.devnet.solana.com",
@@ -102,10 +103,7 @@ export class PgCommon {
     // Mainnet by default
     let cluster = "";
 
-  if (
-      endpoint === Endpoint.DEVNET ||
-      endpoint === Endpoint.DEVNET_GENESYSGO
-    )
+    if (endpoint === Endpoint.DEVNET || endpoint === Endpoint.DEVNET_GENESYSGO)
       cluster = "?cluster=devnet";
 
     return cluster;

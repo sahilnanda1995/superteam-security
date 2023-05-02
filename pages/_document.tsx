@@ -24,6 +24,7 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&family=Inter&family=Archivo&display=swap"
             rel="stylesheet"
           />
+          <link rel="icon" href="/favicon.ico" />
           <meta name="description" content="" />
           <meta name="keywords" content="" />
           <meta name="robots" content="index, follow" />

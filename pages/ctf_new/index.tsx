@@ -4,6 +4,7 @@ import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import Navbar from "../../components/Navbar";
 
 const ctfs = [
   {
@@ -36,24 +37,7 @@ export default function CTF() {
       style={{ backgroundImage: "url('/assets/ctf_bg.svg')" }}
     >
       <div className="flex w-full min-h-screen flex-col items-center py-8 lg:py-10 px-6 lg:px-[72px]">
-        <nav
-          className="flex items-center w-full justify-between"
-          aria-label="Global"
-        >
-          <div className="flex w-full justify-between items-center text-base">
-            <div className="w-max flex flex-row">
-              <p className="whitespace-nowrap text-white">
-                superteam <span className="text-home-neon">&gt;</span>
-              </p>
-              <p className="animate-typing overflow-hidden whitespace-nowrap border-r-8 border-home-neon pr-1 text-home-neon">
-                security
-              </p>
-            </div>
-            <p className="-mx-3 block rounded-lg py-2 px-3 leading-6 text-white hover:bg-gray-400/10">
-              CTFs
-            </p>
-          </div>
-        </nav>
+        <Navbar />
         <div className="mx-auto max-w-2xl py-10 lg:py-12">
           <div className="flex flex-col items-center justify-center text-center space-y-6">
             {/* <Image

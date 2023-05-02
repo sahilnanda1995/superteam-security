@@ -55,12 +55,12 @@ export default function Footer() {
   console.log("PgWallet :: ", pgWallet.publicKey.toBase58());
 
   return (
-    <div className="px-4 sm:px-0 max-w-4xl m-auto">
+    <div className="max-w-4xl m-auto">
       {/* CTF Wallet */}
-      <footer className="left-0 right-0 w-full text-[#e1e2e3] bg-[#191A21]">
+      <footer className="left-0 right-0 w-full text-white bg-[#242424] text-base font-['JetBrains_Mono'] p-3 rounded font-bold ">
         <div className="mx-2 h-3 w-3 rounded-full inline-block bg-green-600"></div>
-        [Devnet] Player wallet - {pgWallet.publicKey.toBase58()} -{" "}
-        {balance} | <button onClick={airdrop}>airdrop()</button>
+        [Devnet] Player wallet - {pgWallet.publicKey.toBase58()} - {balance} |{" "}
+        <button onClick={airdrop}>airdrop()</button>
       </footer>
 
       {/* <footer className="left-0 right-0 w-full p-6 text-center text-[#e1e2e3]">

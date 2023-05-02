@@ -18,6 +18,7 @@ import Footer from "../../components/Footer";
 import Router from "next/router";
 import dynamic from "next/dynamic";
 import NodeWallet from "@project-serum/anchor/dist/cjs/nodewallet";
+import Navbar from "../../components/Navbar";
 
 const downloadSourceCode = async () => {
   let game_wallet = localStorage.getItem("wallet");
@@ -26,9 +27,9 @@ const downloadSourceCode = async () => {
     body: JSON.stringify({
       player: JSON.parse(game_wallet!).sk,
     }),
-  })
-  if (response.status === 200 ) {
-    window.open("/api/hello", "_blank")
+  });
+  if (response.status === 200) {
+    window.open("/api/hello", "_blank");
   }
 };
 
@@ -77,7 +78,6 @@ export default function Home() {
         headers: new Headers({
           "Content-Type": "application/json",
           // "Access-Control-Allow-Origin": "*"
-          
         }),
         body: JSON.stringify({
           pubkey: signedMessage.publicKey,
@@ -112,83 +112,91 @@ export default function Home() {
   }
 
   return (
-    <div className="px-4 sm:px-0 max-w-4xl m-auto">
-      <Head>
-        <title>SuperSec</title>
-        <meta name="description" content="Solana CTFs" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <div className="flex flex-col py-8 lg:py-10 px-6 lg:px-[72px] items-center min-h-screen w-full bg-home-bg font-[Inter] text-ctf-txt">
+      <Navbar />
+      <div className="max-w-2xl">
+        <Head>
+          <title>SuperSec</title>
+          <meta name="description" content="Solana CTFs" />
+        </Head>
+        <main className="relative pt-8 pb-3">
+          <div className="py-3">
+            <div className="text-[#A0A0A0] font-['JetBrains_Mono']">
+              CTF<span className="font-bold text-[#535353] px-1">&bull;</span>
+              0x101<span className="font-bold text-[#535353] px-1">&bull;</span>
+              Hello
+            </div>
+            <div className="text-[32px] leading-9 text-white font-sans stretch-semi mt-2">
+              Steal A Billy
+            </div>
 
-      <Header />
-
-      <main className="relative pt-8 pb-3 px-2 sm:px-0">
-        <div className="py-3">
-          <div className="text-[#2bbc8a]"> CTF::0x101::Hello</div>
-
-          {/* CTFs
+            {/* CTFs
                     - Introduction
                     - Instruction
                     - KeepInMind
             */}
-          <div className="mt-8">
-            Hello, this is a beginner friendly CTF designed to run you through
-            how to capture the flag.
-          </div>
-
-          <div className="mt-4">
-            Your mission is to hack a contract - deployed on Solana devnet -
-            that contains 1B tokens 🤑
-            <br></br>
-            That is if you hack the contract, you will be able to withdraw all
-            the funds from it! 😱
-          </div>
-
-          <div className="mt-4">
-            To start hacking:
-            <div className="mt-4 ml-2">
-              <ol className="list-disc ml-4">
-              {gameWallet.connected ? (
-                  <li>
-                    Download the source code after clicking on commence mission
-                  </li>
-                ) : (
-                  <li>
-                    Create Game Wallet and then download the source code after
-                    clicking on commence mission
-                  </li>
-                )}
-                <li>
-                  Noob to CTF&apos;s? We got you:{" "}
-                  <Link href="/guides/101">
-                    beginner guide to CTF&apos;s on Solana
-                  </Link>
-                </li>
-              </ol>
-            </div>
-          </div>
-          {wallet.connected ? (
-            gameWallet.connected ? (
-              <NextStep />
-            ) : (
-              <div>
-                <button
-                  onClick={createGameWallet}
-                  className="mt-8 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                  Create game wallet
-                </button>
-              </div>
-            )
-          ) : (
             <div className="mt-8">
-              <WalletMultiButtonDynamic />
+              Hello, this is a beginner friendly CTF designed to run you through
+              how to capture the flag.
             </div>
-          )}
-        </div>
-      </main>
-      <Footer />
 
-      {/* <footer className="left-0 right-0 w-full p-6 text-center text-[#e1e2e3]">
+            <div className="mt-4">
+              Your mission is to hack a contract - deployed on Solana devnet -
+              that contains 1B tokens 🤑
+              <br></br>
+              That is if you hack the contract, you will be able to withdraw all
+              the funds from it! 😱
+            </div>
+
+            <div className="mt-4">
+              To start hacking:
+              <div className="mt-4 ml-2">
+                <ol className="list-disc ml-4">
+                  {gameWallet.connected ? (
+                    <li>
+                      Download the source code after clicking on commence
+                      mission
+                    </li>
+                  ) : (
+                    <li>
+                      Create Game Wallet and then download the source code after
+                      clicking on commence mission
+                    </li>
+                  )}
+                  <li>
+                    Noob to CTF&apos;s? We got you:{" "}
+                    <a href="/guides/101" className="underline">
+                      beginner guide to CTF&apos;s on Solana
+                    </a>
+                  </li>
+                </ol>
+              </div>
+            </div>
+            {wallet.connected ? (
+              gameWallet.connected ? (
+                <NextStep />
+              ) : (
+                <div>
+                  <button
+                    onClick={createGameWallet}
+                    className="mt-8 items-center rounded bg-home-green hover:bg-[#1a1f2e] text-base leading-[48px] font-semibold px-6 text-white"
+                  >
+                    Create game wallet
+                  </button>
+                </div>
+              )
+            ) : (
+              <div className="mt-8 flex">
+                <div className="bg-home-green hover:bg-home-green rounded-md font-['JetBrains_Mono'] text-black">
+                  <WalletMultiButtonDynamic className="" />
+                </div>
+              </div>
+            )}
+          </div>
+        </main>
+        <Footer />
+
+        {/* <footer className="left-0 right-0 w-full p-6 text-center text-[#e1e2e3]">
         &copy; {today.getFullYear()}{" "}
         <a
           href="https://twitter.com/0xDeep"
@@ -207,6 +215,7 @@ export default function Home() {
           @0xdeep
         </a>
       </footer> */}
+      </div>
     </div>
   );
 }
@@ -235,9 +244,9 @@ const NextStep = () => {
 
     const signer = gameWallet.publicKey;
     console.log("signer :: ", signer.toString());
-    
+
     if (!signer || !anchorWallet) throw new Error("Signer doesn't exist");
-    
+
     const provider = new anchor.AnchorProvider(connection, gameWallet, {
       preflightCommitment: "recent",
       commitment: "processed",
@@ -277,49 +286,51 @@ const NextStep = () => {
         gameWallet.publicKey,
         PgCommon.solToLamports(1)
       );
-      await connection.confirmTransaction({ signature: airdropTxHash, ...(await connection.getLatestBlockhash())});
+      await connection.confirmTransaction({
+        signature: airdropTxHash,
+        ...(await connection.getLatestBlockhash()),
+      });
       console.log(`Airdrop txHash :: ${airdropTxHash}`);
 
       const signer = gameWallet.publicKey;
       if (!signer || !anchorWallet) throw new Error("Signer doesn't exist");
 
       try {
-      const provider = new anchor.AnchorProvider(connection, gameWallet, {
-        preflightCommitment: "recent",
-        commitment: "processed",
-      });
-      const program = new anchor.Program(
-        IDL,
-        IDL.metadata.address,
-        provider
-      ) as Program<HelloSupersec>;
+        const provider = new anchor.AnchorProvider(connection, gameWallet, {
+          preflightCommitment: "recent",
+          commitment: "processed",
+        });
+        const program = new anchor.Program(
+          IDL,
+          IDL.metadata.address,
+          provider
+        ) as Program<HelloSupersec>;
 
-      const txx = await program.methods.init();
-      const autoInferKey = await txx.pubkeys();
+        const txx = await program.methods.init();
+        const autoInferKey = await txx.pubkeys();
 
-      console.log("chall :: ", autoInferKey.challAccount?.toString());
-      console.log("rewardMint :: ", autoInferKey.rewardMint?.toString());
-      console.log("rewardVault :: ", autoInferKey.rewardVault?.toString());
+        console.log("chall :: ", autoInferKey.challAccount?.toString());
+        console.log("rewardMint :: ", autoInferKey.rewardMint?.toString());
+        console.log("rewardVault :: ", autoInferKey.rewardVault?.toString());
 
-      const tx = await program.methods.init().accounts({
-        signer: signer,
-      });
+        const tx = await program.methods.init().accounts({
+          signer: signer,
+        });
 
-      const txHash = await tx.rpc();
-      console.log("txHash :: ", txHash);
+        const txHash = await tx.rpc();
+        console.log("txHash :: ", txHash);
 
-      const confirmTx = await connection.getSignatureStatus(txHash);
-      console.log("Tx status :: ", confirmTx);
+        const confirmTx = await connection.getSignatureStatus(txHash);
+        console.log("Tx status :: ", confirmTx);
 
-      if (confirmTx.value?.confirmationStatus === "confirmed") {
-        setisInstanceDeployedState(true);
+        if (confirmTx.value?.confirmationStatus === "confirmed") {
+          setisInstanceDeployedState(true);
+          setdeployLoader(false);
+        }
+      } catch (error) {
+        console.log("error ::", error);
         setdeployLoader(false);
       }
-    } catch (error) {
-      console.log("error ::", error);
-      setdeployLoader(false);
-    }
-
     }
   }
 
@@ -399,52 +410,52 @@ const NextStep = () => {
 
   return (
     <>
-    {isStateReady ? (
-      <div>
-        {isInstanceDeployedState ? (
-          <>
-            {pawned ? (
-              <div>Wow, you did it</div>
-            ) : (
-              <div className="mt-4">
-                Mission is started:{" "}
-                <a
-                  className="text-blue"
-                  onClick={(e) => {
-                    downloadSourceCode()
-                  }}
-                >
-                  download the source code
-                </a>{" "}
-                cadet!
-              </div>
-            )}
+      {isStateReady ? (
+        <div>
+          {isInstanceDeployedState ? (
+            <>
+              {pawned ? (
+                <div>Wow, you did it</div>
+              ) : (
+                <div className="mt-4">
+                  Mission is started:{" "}
+                  <a
+                    className="text-blue"
+                    onClick={(e) => {
+                      downloadSourceCode();
+                    }}
+                  >
+                    download the source code
+                  </a>{" "}
+                  cadet!
+                </div>
+              )}
 
+              <div>
+                <button
+                  onClick={getFlag}
+                  className="mt-8 items-center rounded bg-home-green hover:bg-[#1a1f2e] text-base leading-[48px] font-semibold px-6 text-white"
+                >
+                  Get My Flag
+                </button>
+
+                <button
+                  onClick={removeInstance}
+                  className="mt-8 items-center rounded bg-home-green hover:bg-[#1a1f2e] text-base leading-[48px] font-semibold px-6 text-white"
+                >
+                  Reset Mission
+                </button>
+              </div>
+            </>
+          ) : (
             <div>
               <button
-                onClick={getFlag}
-                className="mt-8 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                onClick={deployNewInstance}
+                className="mt-8 items-center rounded bg-home-green hover:bg-[#1a1f2e] text-base leading-[48px] font-semibold px-6 text-white"
               >
-                Get My Flag
+                Commence Mission
               </button>
-
-              <button
-                onClick={removeInstance}
-                className="ml-8 mt-8 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-              >
-                Reset Mission
-              </button>
-            </div>
-          </>
-        ) : (
-          <div>
-            <button
-              onClick={deployNewInstance}
-              className="mt-8 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            >
-              Commence Mission
-            </button>
-            {deployLoader ? (
+              {deployLoader ? (
                 <div
                   className="inline-block ml-4 h-4 w-4 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
                   role="status"
@@ -456,12 +467,12 @@ const NextStep = () => {
               ) : (
                 <></>
               )}
-          </div>
-        )}
-      </div>
-    ): (
-      <div></div>
-    )}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div></div>
+      )}
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={setOpen}>
           <Transition.Child

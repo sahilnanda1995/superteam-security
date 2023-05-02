@@ -18,6 +18,7 @@ import Router from "next/router";
 import { PgCommon, SERVER_URL } from "../../utils/common";
 
 import { Deciswap, IDL } from "../../IDLs/deciswap";
+import Navbar from "../../components/Navbar";
 
 const downloadSourceCode = async () => {
   console.log("downloading ....");
@@ -27,15 +28,15 @@ const downloadSourceCode = async () => {
   if (accounts) {
     let parse_accounts = JSON.parse(accounts);
     if (parse_accounts.account) {
-      accounts = parse_accounts.account
+      accounts = parse_accounts.account;
     }
   }
-   
+
   const response = await fetch("/api/deciswap", {
     method: "POST",
     body: JSON.stringify({
-        player: JSON.parse(game_wallet!).sk,
-        accounts: accounts,
+      player: JSON.parse(game_wallet!).sk,
+      accounts: accounts,
     }),
   });
   if (response.status === 200) {
@@ -123,76 +124,87 @@ export default function Home() {
   }
 
   return (
-    <div className="px-4 sm:px-0 max-w-4xl m-auto">
-      <Head>
-        <title>SuperSec</title>
-        <meta name="description" content="Solana CTFs" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <div className="flex flex-col py-8 lg:py-10 px-6 lg:px-[72px] items-center min-h-screen w-full bg-home-bg font-[Inter] text-ctf-txt">
+      <Navbar />
+      <div className="sm:px-0 max-w-2xl">
+        <Head>
+          <title>SuperSec</title>
+          <meta name="description" content="Solana CTFs" />
+        </Head>
 
-      <Header />
-
-      <main className="relative pt-8 pb-3 px-2 sm:px-0">
-        <div className="py-3">
-        <div className="text-[#2bbc8a]"> CTF::0x104::Solman Brothers</div>
-
-          <div className="mt-8">Hello,</div>
-
-          <div className="mt-4">
-            Your mission is to hack Solman Brothers - a bank that stores various forms of Solana in different vaults. 
-            <br></br>
-            Currently it has 3 vaults storing $1M worth of wormhole-wrapped SOL, sollet-wrapped SOL and lido-staked SOL respectively. 
-            <br></br>
-            Steal half of the money to capture the flag! 
-          </div>
-
-
-          <div className="mt-4">
-            To start hacking:
-            <div className="mt-4 ml-2">
-              <ol className="list-disc ml-4">
-                {gameWallet.connected ? (
-                  <li>
-                    Download the source code after clicking on commence mission
-                  </li>
-                ) : (
-                  <li>
-                    Create Game Wallet and then download the source code after
-                    clicking on commence mission
-                  </li>
-                )}
-
-                <li>
-                  Noob to CTF&apos;s? We got you:{" "}
-                  <Link href="/guides/101">
-                    beginner guide to CTF&apos;s on Solana
-                  </Link>
-                </li>
-              </ol>
+        <main className="relative pt-8 pb-3">
+          <div className="py-3">
+            <div className="text-[#A0A0A0] font-['JetBrains_Mono']">
+              CTF<span className="font-bold text-[#535353] px-1">&bull;</span>
+              0x104<span className="font-bold text-[#535353] px-1">&bull;</span>
+              Hello
             </div>
-          </div>
+            <div className="text-[32px] leading-9 text-white font-sans stretch-semi mt-2">
+              Solman Brothers
+            </div>
 
-          {wallet.connected ? (
-            gameWallet.connected ? (
-              <NextStep />
-            ) : (
-              <div>
-                <button
-                  onClick={createGameWallet}
-                  className="mt-8 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                  Create game wallet
-                </button>
+            <div className="mt-8">Hello,</div>
+
+            <div className="mt-4">
+              Your mission is to hack Solman Brothers - a bank that stores
+              various forms of Solana in different vaults.
+              <br></br>
+              Currently it has 3 vaults storing $1M worth of wormhole-wrapped
+              SOL, sollet-wrapped SOL and lido-staked SOL respectively.
+              <br></br>
+              Steal half of the money to capture the flag!
+            </div>
+
+            <div className="mt-4">
+              To start hacking:
+              <div className="mt-4 ml-2">
+                <ol className="list-disc ml-4">
+                  {gameWallet.connected ? (
+                    <li>
+                      Download the source code after clicking on commence
+                      mission
+                    </li>
+                  ) : (
+                    <li>
+                      Create Game Wallet and then download the source code after
+                      clicking on commence mission
+                    </li>
+                  )}
+
+                  <li>
+                    Noob to CTF&apos;s? We got you:{" "}
+                    <Link href="/guides/101">
+                      beginner guide to CTF&apos;s on Solana
+                    </Link>
+                  </li>
+                </ol>
               </div>
-            )
-          ) : (
-            <div className="mt-8">
-              <WalletMultiButtonDynamic />
             </div>
-          )}
-        </div>
-      </main>
-      <Footer />
+
+            {wallet.connected ? (
+              gameWallet.connected ? (
+                <NextStep />
+              ) : (
+                <div>
+                  <button
+                    onClick={createGameWallet}
+                    className="mt-8 items-center rounded bg-home-green hover:bg-[#1a1f2e] text-base leading-[48px] font-semibold px-6 text-white"
+                  >
+                    Create game wallet
+                  </button>
+                </div>
+              )
+            ) : (
+              <div className="mt-8 flex">
+                <div className="bg-home-green hover:bg-home-green rounded-md font-['JetBrains_Mono'] text-black">
+                  <WalletMultiButtonDynamic className="" />
+                </div>
+              </div>
+            )}
+          </div>
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 }
@@ -335,25 +347,37 @@ const NextStep = () => {
 
       console.log(accounts);
 
-      const ms_pool = new anchor.web3.PublicKey(accounts.account.ms_pool_account);
-      const st_pool = new anchor.web3.PublicKey(accounts.account.st_pool_account);
-      const wo_pool = new anchor.web3.PublicKey(accounts.account.wo_pool_account);
+      const ms_pool = new anchor.web3.PublicKey(
+        accounts.account.ms_pool_account
+      );
+      const st_pool = new anchor.web3.PublicKey(
+        accounts.account.st_pool_account
+      );
+      const wo_pool = new anchor.web3.PublicKey(
+        accounts.account.wo_pool_account
+      );
 
       console.log(ms_pool);
       console.log(st_pool);
       console.log(wo_pool);
 
-
       try {
-        const ms_pool_balance = await program.provider.connection.getTokenAccountBalance(ms_pool);
-        const st_pool_balance = await program.provider.connection.getTokenAccountBalance(st_pool);
-        const wo_pool_balance = await program.provider.connection.getTokenAccountBalance(wo_pool);
+        const ms_pool_balance =
+          await program.provider.connection.getTokenAccountBalance(ms_pool);
+        const st_pool_balance =
+          await program.provider.connection.getTokenAccountBalance(st_pool);
+        const wo_pool_balance =
+          await program.provider.connection.getTokenAccountBalance(wo_pool);
 
         console.log("ms_pool_balance :: ", ms_pool_balance);
         console.log("st_pool_balance :: ", st_pool_balance);
         console.log("wo_pool_balance :: ", wo_pool_balance);
 
-        if (ms_pool_balance.value.amount === "0" && st_pool_balance.value.amount === "0" && wo_pool_balance.value.amount === "0") {
+        if (
+          ms_pool_balance.value.amount === "0" &&
+          st_pool_balance.value.amount === "0" &&
+          wo_pool_balance.value.amount === "0"
+        ) {
           setPawned(true);
           setOpen(true);
         } else {
@@ -402,26 +426,26 @@ const NextStep = () => {
               <div>
                 <button
                   onClick={getFlag}
-                  className="mt-8 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  className="mt-8 items-center rounded bg-home-green hover:bg-[#1a1f2e] text-base leading-[48px] font-semibold px-6 text-white"
                 >
                   Get My Flag
                 </button>
                 {getFlagLoader ? (
-                <div
-                  className="inline-block ml-4 h-4 w-4 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-                  role="status"
-                >
-                  <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-                    checking ...
-                  </span>
-                </div>
-              ) : (
-                <></>
-              )}
+                  <div
+                    className="inline-block ml-4 h-4 w-4 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                    role="status"
+                  >
+                    <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                      checking ...
+                    </span>
+                  </div>
+                ) : (
+                  <></>
+                )}
 
                 {/* <button
               onClick={removeInstance}
-              className="ml-8 mt-8 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="mt-8 items-center rounded bg-home-green hover:bg-[#1a1f2e] text-base leading-[48px] font-semibold px-6 text-white"
             >
               Reset Mission
             </button> */}
@@ -431,7 +455,7 @@ const NextStep = () => {
             <div>
               <button
                 onClick={deployNewInstance}
-                className="mt-8 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                className="mt-8 items-center rounded bg-home-green hover:bg-[#1a1f2e] text-base leading-[48px] font-semibold px-6 text-white"
               >
                 Commence Mission
               </button>

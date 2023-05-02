@@ -30,12 +30,12 @@ body {
   text-decoration: none;
 } */
 
-a {
+/* a {
 	color: #80aad4;
 	background-position: bottom;
 	background-size: 100% 6px;
 	background-repeat: repeat-x;
-}
+} */
 
 .force_widht {
   max-width: 85ch;
@@ -50,9 +50,9 @@ h2 {
   color: #e1e2e3 !important;
 } */
 
-a:hover {
+/* a:hover {
 	background-image: linear-gradient(transparent, transparent 4px, #80aad4 4px, #80aad4);
-}
+} */
 
 * {
   box-sizing: border-box;

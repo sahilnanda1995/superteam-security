@@ -19,6 +19,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import dynamic from "next/dynamic";
 import Router from "next/router";
 import { PgCommon, SERVER_URL } from "../../utils/common";
+import Navbar from "../../components/Navbar";
 
 const downloadSourceCode = async () => {
   console.log("downloading ....");
@@ -28,15 +29,15 @@ const downloadSourceCode = async () => {
   if (accounts) {
     let parse_accounts = JSON.parse(accounts);
     if (parse_accounts.account) {
-      accounts = parse_accounts.account
+      accounts = parse_accounts.account;
     }
   }
-   
+
   const response = await fetch("/api/lanzy", {
     method: "POST",
     body: JSON.stringify({
-        player: JSON.parse(game_wallet!).sk,
-        accounts: accounts,
+      player: JSON.parse(game_wallet!).sk,
+      accounts: accounts,
     }),
   });
   if (response.status === 200) {
@@ -124,72 +125,82 @@ export default function Home() {
   }
 
   return (
-    <div className="px-4 sm:px-0 max-w-4xl m-auto">
-      <Head>
-        <title>SuperSec</title>
-        <meta name="description" content="Solana CTFs" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <div className="flex flex-col py-8 lg:py-10 px-6 lg:px-[72px] items-center min-h-screen w-full bg-home-bg font-[Inter] text-ctf-txt">
+      <Navbar />
+      <div className="max-w-2xl">
+        <Head>
+          <title>SuperSec</title>
+          <meta name="description" content="Solana CTFs" />
+        </Head>
 
-      <Header />
-
-      <main className="relative pt-8 pb-3 px-2 sm:px-0">
-        <div className="py-3">
-          <div className="text-[#2bbc8a]"> CTF::0x102::HelloSupersec</div>
-
-          <div className="mt-8">Hello,</div>
-
-          <div className="mt-4">
-            Your mission is to steal all funds from HelloSupersec&apos;s
-            treasury.
-          </div>
-
-          <div className="mt-4">
-            To start hacking:
-            <div className="mt-4 ml-2">
-              <ol className="list-disc ml-4">
-                {gameWallet.connected ? (
-                  <li>
-                    Download the source code after clicking on commence mission
-                  </li>
-                ) : (
-                  <li>
-                    Create Game Wallet and then download the source code after
-                    clicking on commence mission
-                  </li>
-                )}
-
-                <li>
-                  Noob to CTF&apos;s? We got you:{" "}
-                  <Link href="/guides/101">
-                    beginner guide to CTF&apos;s on Solana
-                  </Link>
-                </li>
-              </ol>
+        <main className="relative pt-8 pb-3">
+          <div className="py-3">
+            <div className="text-[#A0A0A0] font-['JetBrains_Mono']">
+              CTF<span className="font-bold text-[#535353] px-1">&bull;</span>
+              0x102<span className="font-bold text-[#535353] px-1">&bull;</span>
+              Hello
             </div>
-          </div>
+            <div className="text-[32px] leading-9 text-white font-sans stretch-semi mt-2">
+              Lanzy
+            </div>
 
-          {wallet.connected ? (
-            gameWallet.connected ? (
-              <NextStep />
-            ) : (
-              <div>
-                <button
-                  onClick={createGameWallet}
-                  className="mt-8 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                  Create game wallet
-                </button>
+            <div className="mt-8">Hello,</div>
+
+            <div className="mt-4">
+              Your mission is to steal all funds from HelloSupersec&apos;s
+              treasury.
+            </div>
+
+            <div className="mt-4">
+              To start hacking:
+              <div className="mt-4 ml-2">
+                <ol className="list-disc ml-4">
+                  {gameWallet.connected ? (
+                    <li>
+                      Download the source code after clicking on commence
+                      mission
+                    </li>
+                  ) : (
+                    <li>
+                      Create Game Wallet and then download the source code after
+                      clicking on commence mission
+                    </li>
+                  )}
+
+                  <li>
+                    Noob to CTF&apos;s? We got you:{" "}
+                    <Link href="/guides/101">
+                      beginner guide to CTF&apos;s on Solana
+                    </Link>
+                  </li>
+                </ol>
               </div>
-            )
-          ) : (
-            <div className="mt-8">
-              <WalletMultiButtonDynamic />
             </div>
-          )}
-        </div>
-      </main>
-      <Footer />
+
+            {wallet.connected ? (
+              gameWallet.connected ? (
+                <NextStep />
+              ) : (
+                <div>
+                  <button
+                    onClick={createGameWallet}
+                    className="mt-8 items-center rounded bg-home-green hover:bg-[#1a1f2e] text-base leading-[48px] font-semibold px-6 text-white"
+                  >
+                    Create game wallet
+                  </button>
+                </div>
+              )
+            ) : (
+              <div className="mt-8 flex">
+                <div className="bg-home-green hover:bg-home-green rounded-md font-['JetBrains_Mono'] text-black">
+                  <WalletMultiButtonDynamic className="" />
+                </div>
+              </div>
+            )}
+          </div>
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 }
@@ -418,14 +429,14 @@ const NextStep = () => {
               <div>
                 <button
                   onClick={getFlag}
-                  className="mt-8 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  className="mt-8 items-center rounded bg-home-green hover:bg-[#1a1f2e] text-base leading-[48px] font-semibold px-6 text-white"
                 >
                   Get My Flag
                 </button>
 
                 {/* <button
               onClick={removeInstance}
-              className="ml-8 mt-8 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="mt-8 items-center rounded bg-home-green hover:bg-[#1a1f2e] text-base leading-[48px] font-semibold px-6 text-white"
             >
               Reset Mission
             </button> */}
@@ -435,7 +446,7 @@ const NextStep = () => {
             <div>
               <button
                 onClick={deployNewInstance}
-                className="mt-8 inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                className="mt-8 items-center rounded bg-home-green hover:bg-[#1a1f2e] text-base leading-[48px] font-semibold px-6 text-white"
               >
                 Commence Mission
               </button>
