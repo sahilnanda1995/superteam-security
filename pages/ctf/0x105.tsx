@@ -126,6 +126,12 @@ export default function Home() {
   return (
     <div className="flex flex-col py-8 lg:py-10 px-6 lg:px-[72px] items-center min-h-screen w-full bg-home-bg font-[Inter] text-ctf-txt">
       <Navbar />
+      <Link
+        href="/ctf"
+        className="flex text-base w-full text-guide-sub-txt mt-10 leading-5 font-['JetBrains_Mono']"
+      >
+        &lt; CTFs
+      </Link>
       <div className="sm:px-0 max-w-2xl">
         <Head>
           <title>SuperSec</title>
@@ -139,7 +145,7 @@ export default function Home() {
               0x105<span className="font-bold text-[#535353] px-1">&bull;</span>
               Hello
             </div>
-            <div className="text-[32px] leading-9 text-white font-sans stretch-semi mt-2">
+            <div className="text-[32px] leading-9 text-white font-sans tracking-wide mt-2">
               Borrow and Bye
             </div>
 

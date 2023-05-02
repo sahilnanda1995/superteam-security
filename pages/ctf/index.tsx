@@ -5,6 +5,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Navbar from "../../components/Navbar";
+import Link from "next/link";
 
 const ctfs = [
   {
@@ -38,6 +39,12 @@ export default function CTF() {
     >
       <div className="flex w-full min-h-screen flex-col items-center py-8 lg:py-10 px-6 lg:px-[72px]">
         <Navbar />
+        <Link
+          href="/"
+          className="flex text-base w-full text-guide-sub-txt mt-10 leading-5 font-['JetBrains_Mono']"
+        >
+          &lt; Hacks
+        </Link>
         <div className="mx-auto max-w-2xl py-10 lg:py-12">
           <div className="flex flex-col items-center justify-center text-center space-y-6">
             {/* <Image

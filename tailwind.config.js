@@ -36,6 +36,7 @@ module.exports = {
         "home-tab-exp-subtxt": "#909090",
         "ctf-bodr": "#2B2B2B",
         "ctf-txt": "#BFBFBF",
+        "guide-sub-txt": "#A0A0A0",
       },
       keyframes: {
         typing: {
