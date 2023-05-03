@@ -82,7 +82,7 @@ export default function CTF() {
               <p className="text-sm text-home-tab-title">{ctf.id}</p>
               onClick={} <p className="text-xl">{ctf.title}</p>
               <button
-                className="text-sm bg-home-tab-exp-bg p-4 w-full text-home-green hover:text-home-bg rounded-lg hover:bg-home-green font-['JetBrains_Mono']"
+                className="text-sm bg-home-tab-exp-bg p-4 w-full hover:text-home-bg rounded-lg hover:bg-home-green font-['JetBrains_Mono']"
                 onClick={() => router.push(ctf.link)}
               >
                 Begin
