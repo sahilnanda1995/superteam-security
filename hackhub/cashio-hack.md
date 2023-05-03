@@ -4,6 +4,16 @@ description: "Learn how rust memory layout works"
 pubDate: "Sep 14 2022"
 year: 2022
 active: true
+toc:
+  [
+    "what-would-you-use-cashio-protocol-for",
+    "how-did-the-hacker-steal-funds",
+    "technical-details",
+    "how-to-fix-the-vulnerability",
+    "what-did-hacker-do-with-the-funds-after-the-exploit-was-successful",
+    "hacker-hailed-as-robinhood",
+    "appendix",
+  ]
 ---
 
 Cashio - a protocol that builds a decentralized stablecoin $CASH - got hacked for $52M.
@@ -12,8 +22,6 @@ The $CASH stablecoin, whose value is supposed to be pegged to $1 dollar, plummet
 
 Let’s first understand what cashio protocol does and then deep dive in figuring out how the hacker tricked the protocol in giving them all the user deposited funds.
 <br>
-
-## Table of contents
 
 ## What would you use Cashio protocol for?
 

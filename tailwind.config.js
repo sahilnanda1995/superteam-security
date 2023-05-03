@@ -29,6 +29,7 @@ module.exports = {
         "home-parrot": "#B0CCAB",
         "home-green": "#98DA8D",
         "home-tab-head": "#1D1D1D",
+        "home-tab-hovr": "#181818",
         "home-tab-title": "#636363",
         "home-tab-amt": "#999999",
         "home-tab-exp-bg": "#272727",

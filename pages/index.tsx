@@ -88,13 +88,15 @@ export default function Home() {
               {protocols.map((protocol, index) => (
                 <tr
                   key={index}
-                  className="hover:bg-home-tab-head cursor-pointer divide-x divide-home-tab-head"
+                  className="hover:bg-home-tab-hovr cursor-pointer divide-x divide-home-tab-head"
                   onClick={() => protocol?.link && router.push(protocol.link)}
                 >
                   <td className="px-6 py-6 text-sm">
                     <div className="flex flex-col">
                       <div className="flex flex-row space-x-2 items-center">
-                        <div>{protocol.name}</div>
+                        <div className="underline underline-offset-4">
+                          {protocol.name}
+                        </div>
                         <div className="bg-home-tab-head px-2 py-1 rounded-lg lg:hidden">
                           {protocol.amount}
                         </div>
@@ -144,11 +146,13 @@ export default function Home() {
                 key={index}
                 className="bg-gradient-to-r from-home-tab-head via-home-green to-home-tab-head w-full rounded-lg"
               >
-                <div className="hover:bg-home-tab-head bg-home-bg w-full rounded-lg border border-home-tab-head cursor-pointer divide-x divide-home-tab-head mt-[0.5px]">
+                <div className="hover:bg-home-tab-hovr bg-home-bg w-full rounded-lg border border-home-tab-head cursor-pointer divide-x divide-home-tab-head mt-[0.5px]">
                   <div className="px-6 py-6 text-sm">
                     <div className="flex flex-col">
                       <div className="flex flex-row space-x-2 items-center">
-                        <div>{protocol.name}</div>
+                        <div className="underline underline-offset-4">
+                          {protocol.name}
+                        </div>
                         <div className="bg-home-tab-head px-2 py-1 rounded-lg lg:hidden">
                           {protocol.amount}
                         </div>
@@ -176,12 +180,14 @@ export default function Home() {
             ) : (
               <div
                 key={index}
-                className="hover:bg-home-tab-head bg-home-bg w-full rounded-lg border border-home-tab-head cursor-pointer divide-x divide-home-tab-head"
+                className="hover:bg-home-tab-hovr bg-home-bg w-full rounded-lg border border-home-tab-head cursor-pointer divide-x divide-home-tab-head"
               >
                 <div className="px-6 py-6 text-sm">
                   <div className="flex flex-col">
                     <div className="flex flex-row space-x-2 items-center">
-                      <div>{protocol.name}</div>
+                      <div className="underline underline-offset-4">
+                        {protocol.name}
+                      </div>
                       <div className="bg-home-tab-head px-2 py-1 rounded-lg lg:hidden">
                         {protocol.amount}
                       </div>

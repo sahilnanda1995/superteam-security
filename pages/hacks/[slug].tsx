@@ -111,7 +111,7 @@ export default function BlogPage({ frontMatter, content }: any) {
   //   };
 
   return (
-    <div className="relative isolate min-h-screen overflow-hidden bg-home-bg font-['JetBrains_Mono']">
+    <div className="flex flex-col w-full min-h-screen overflow-hidden bg-home-bg font-['JetBrains_Mono']">
       <title>SuperSec</title>
       {/* <Image
         alt="bg_img"
@@ -141,7 +141,7 @@ export default function BlogPage({ frontMatter, content }: any) {
             }}
           /> */}
           <ReactMarkdown
-            className="prose font-['Inter'] prose-headings:font-['JetBrains_Mono'] max-w-xl prose-headings:text-home-neon"
+            className="prose flex flex-col font-['Inter'] prose-headings:font-['JetBrains_Mono'] max-w-xl prose-headings:text-home-neon"
             remarkPlugins={[remarkGfm, remarkToc, remarkSlug]}
             // renderers={renderers}
             // pluginsOptions={{
@@ -153,7 +153,7 @@ export default function BlogPage({ frontMatter, content }: any) {
             {content}
           </ReactMarkdown>
         </div>
-        <footer className="flex flex-col items-center text-home-green mt-10 text-sm">
+        {/* <footer className="flex flex-col items-center text-home-green mt-10 text-sm">
           <div className="text-center bg-home-tab-head p-6 rounded-lg">
             <div>
               proudly built by findsignal studio.
@@ -161,7 +161,7 @@ export default function BlogPage({ frontMatter, content }: any) {
             </div>
             <div>designed by @pragdua</div>
           </div>
-        </footer>
+        </footer> */}
       </div>
     </div>
   );
