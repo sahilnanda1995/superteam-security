@@ -19,6 +19,7 @@ import { PgCommon, SERVER_URL } from "../../utils/common";
 
 import { FlashLoan, IDL } from "../../IDLs/flash_loan";
 import Navbar from "../../components/Navbar";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 const downloadSourceCode = async () => {
   console.log("downloading ....");
@@ -43,12 +44,6 @@ const downloadSourceCode = async () => {
     window.open("/api/flashloan", "_blank");
   }
 };
-
-const WalletMultiButtonDynamic = dynamic(
-  async () =>
-    (await import("@solana/wallet-adapter-react-ui")).WalletMultiButton,
-  { ssr: false }
-);
 
 export default function Home() {
   // const [gameWallet, setGameWallet] = useState(false);
@@ -198,9 +193,7 @@ export default function Home() {
               )
             ) : (
               <div className="mt-8 flex">
-                <div className="bg-home-green hover:bg-home-green rounded-md font-['JetBrains_Mono'] text-black">
-                  <WalletMultiButtonDynamic className="" />
-                </div>
+                <WalletMultiButton className="bg-home-green rounded-md font-['JetBrains_Mono'] text-black hover:text-white hover:bg-home-neon" />
               </div>
             )}
           </div>

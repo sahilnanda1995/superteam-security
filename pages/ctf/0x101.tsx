@@ -6,6 +6,7 @@ import { Program } from "@project-serum/anchor";
 import { HelloSupersec, IDL } from "../../IDLs/hello_supersec";
 import { useAnchorWallet, useWallet } from "@solana/wallet-adapter-react";
 import { useConnection } from "@solana/wallet-adapter-react";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { SelectAndConnectWalletButton } from "../../components/SelectAndConnectWalletButton";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Fragment } from "react";
@@ -32,12 +33,6 @@ const downloadSourceCode = async () => {
     window.open("/api/hello", "_blank");
   }
 };
-
-const WalletMultiButtonDynamic = dynamic(
-  async () =>
-    (await import("@solana/wallet-adapter-react-ui")).WalletMultiButton,
-  { ssr: false }
-);
 
 export default function Home() {
   const gameWallet = getLs();
@@ -193,9 +188,7 @@ export default function Home() {
               )
             ) : (
               <div className="mt-8 flex">
-                <div className="bg-home-green hover:bg-home-green rounded-md font-['JetBrains_Mono'] text-black">
-                  <WalletMultiButtonDynamic className="" />
-                </div>
+                <WalletMultiButton className="bg-home-green rounded-md font-['JetBrains_Mono'] text-black hover:text-white hover:bg-home-neon" />
               </div>
             )}
           </div>

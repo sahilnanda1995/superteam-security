@@ -55,33 +55,10 @@ export default function Footer() {
   console.log("PgWallet :: ", pgWallet.publicKey.toBase58());
 
   return (
-    <div className="">
-      {/* CTF Wallet */}
-      <footer className="left-0 right-0 w-full text-white bg-[#242424] text-base font-['JetBrains_Mono'] p-3 rounded font-bold ">
-        <div className="mx-2 h-3 w-3 rounded-full inline-block bg-green-600"></div>
-        [Devnet] Player wallet - {pgWallet.publicKey.toBase58()} - {balance} |{" "}
-        <button onClick={airdrop}>airdrop()</button>
-      </footer>
-
-      {/* <footer className="left-0 right-0 w-full p-6 text-center text-[#e1e2e3]">
-          &copy; {Date.now()}{" "}
-          <a
-            href="https://twitter.com/0xDeep"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            @Superteam Security
-          </a>{" "}
-          . All rights reserved. <br />
-          This website was modified from{" "}
-          <a
-            href="https://twitter.com/0xDeep"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            @0xdeep
-          </a>
-        </footer> */}
-    </div>
+    <footer className="w-full text-white bg-[#242424] text-base font-['JetBrains_Mono'] mt-4 p-3 rounded-lg font-bold ">
+      <div className="mx-2 h-3 w-3 rounded-full inline-block bg-green-600"></div>
+      [Devnet] Player wallet - {pgWallet.publicKey.toBase58()} - {balance} |{" "}
+      <button onClick={airdrop}>airdrop()</button>
+    </footer>
   );
 }
