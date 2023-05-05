@@ -61,7 +61,7 @@ const solutions = [
   { name: "Reports", href: "#" },
 ];
 
-function MyPopover({ toc, links }) {
+function MyPopover({ toc, links }: any) {
   // const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -82,7 +82,9 @@ function MyPopover({ toc, links }) {
           <ul className="flex flex-col text-xs mt-2 space-y-1 list-outside">
             {toc.map((data: string, index: number) => (
               <li key={index} className="hover:underline">
-                <Link href={`#${links[index]}`}>{data}</Link>
+                <Link href={`#${links[index]}`} scroll={false}>
+                  {data}
+                </Link>
               </li>
             ))}
           </ul>
@@ -112,7 +114,12 @@ export default function BlogPage({ frontMatter, content }: any) {
             <ul className="flex flex-col text-sm mt-2 space-y-1 list-outside">
               {frontMatter.toc.map((data: string, index: number) => (
                 <li key={index} className="hover:underline">
-                  <Link href={`#${frontMatter.toc_links[index]}`}>{data}</Link>
+                  <Link
+                    href={`#${frontMatter.toc_links[index]}`}
+                    scroll={false}
+                  >
+                    {data}
+                  </Link>
                 </li>
               ))}
             </ul>

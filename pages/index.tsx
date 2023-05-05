@@ -145,6 +145,7 @@ export default function Home() {
               <div
                 key={index}
                 className="bg-gradient-to-r from-home-tab-head via-home-green to-home-tab-head w-full rounded-lg"
+                onClick={() => protocol?.link && router.push(protocol.link)}
               >
                 <div className="hover:bg-home-tab-hovr bg-home-bg w-full rounded-lg border border-home-tab-head cursor-pointer divide-x divide-home-tab-head mt-[0.5px]">
                   <div className="px-6 py-6 text-sm">
@@ -181,6 +182,7 @@ export default function Home() {
               <div
                 key={index}
                 className="hover:bg-home-tab-hovr bg-home-bg w-full rounded-lg border border-home-tab-head cursor-pointer divide-x divide-home-tab-head"
+                onClick={() => protocol?.link && router.push(protocol.link)}
               >
                 <div className="px-6 py-6 text-sm">
                   <div className="flex flex-col">
