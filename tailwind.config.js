@@ -8,6 +8,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      screens: {
+        "2lg": "1100px",
+      },
       fontFamily: {
         sans: ["Archivo", "Inter", ...defaultTheme.fontFamily.sans],
         mono: ["JetBrainsMono", "menlo", ...defaultTheme.fontFamily.mono],

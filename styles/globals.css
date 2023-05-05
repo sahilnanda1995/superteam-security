@@ -2,14 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-/* body {
-  padding: 0;
-  margin: 0;
-  font-family: menlo, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-} */
-
+html
 
 body {
 	font-family: system-ui, menlo, monospace ,sans-serif, Verdana;
@@ -75,6 +68,10 @@ h2 {
 .ctf-bg {
   background-image: url('/public/assets/ctf_bg.svg');
   background-repeat: repeat;
+}
+
+.warning {
+  background-color: #2bbc8a;
 }
 
 code {

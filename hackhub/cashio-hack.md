@@ -6,6 +6,16 @@ year: 2022
 active: true
 toc:
   [
+    "What would you use Cashio protocol for?",
+    "How did the hacker steal funds?",
+    "Technical details",
+    "How to fix the vulnerability",
+    "What did hacker do with the funds after the exploit was successful",
+    "Hacker hailed as robinhood",
+    "Appendix",
+  ]
+toc_links:
+  [
     "what-would-you-use-cashio-protocol-for",
     "how-did-the-hacker-steal-funds",
     "technical-details",
