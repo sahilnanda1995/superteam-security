@@ -14,7 +14,7 @@ toc_links:
   [
     "why-would-you-use-jet-protocol",
 "how-could-the-hacker-have-stolen-the-funds",
-"how-could-the-exploit-work?",
+"how-could-the-exploit-work",
 "technical-details",
 "how-to-fix-the-vulnerability?",
 "official-response",

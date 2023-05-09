@@ -108,35 +108,39 @@ export default function BlogPage({ frontMatter, content }: any) {
         &lt; Hacks
       </Link>
       <div className="relative w-full items-center mt-20">
-        <div className="fixed w-1/6 pr-8 lg:pr-2">
-          <div className="hidden 2lg:flex flex-col">
-            <div>contents</div>
-            <ul className="flex flex-col text-sm mt-2 space-y-1 list-outside">
-              {frontMatter.toc.map((data: string, index: number) => (
-                <li key={index} className="hover:underline">
-                  <Link
-                    href={`#${frontMatter.toc_links[index]}`}
-                    scroll={false}
-                  >
-                    {data}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+        {frontMatter?.toc && frontMatter.toc_links && (
+          <div className="fixed w-1/6 pr-8 lg:pr-2">
+            <div className="hidden 2lg:flex flex-col">
+              <div>contents</div>
+              <ul className="flex flex-col text-sm mt-2 space-y-1 list-outside">
+                {frontMatter.toc.map((data: string, index: number) => (
+                  <li key={index} className="hover:underline">
+                    <Link
+                      href={`#${frontMatter.toc_links[index]}`}
+                      scroll={false}
+                    >
+                      {data}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-        </div>
-        <div className="fixed pr-8 lg:pr-2 bottom-2 w-full">
-          <div className="2lg:hidden flex w-full">
-            <MyPopover toc={frontMatter.toc} links={frontMatter.toc_links} />
-            {/* <ul className="flex flex-col text-sm mt-2 space-y-1 list-outside">
+        )}
+        {frontMatter?.toc && frontMatter.toc_links && (
+          <div className="fixed pr-8 lg:pr-2 bottom-2 w-full">
+            <div className="2lg:hidden flex w-full">
+              <MyPopover toc={frontMatter.toc} links={frontMatter.toc_links} />
+              {/* <ul className="flex flex-col text-sm mt-2 space-y-1 list-outside">
               {frontMatter.toc.map((data: string, index: number) => (
                 <li key={index} className="hover:underline">
                   <Link href={`#${frontMatter.toc_links[index]}`}>{data}</Link>
                 </li>
               ))}
             </ul> */}
+            </div>
           </div>
-        </div>
+        )}
         <div className="flex flex-col w-full items-center">
           <div className="flex flex-col w-full items-center max-w-xl">
             <h1 className="flex font-sans text-3xl tracking-wider">

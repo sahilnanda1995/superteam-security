@@ -68,12 +68,15 @@ export default function CTF() {
           </div>
         </div>
         <div className="flex flex-col w-full max-w-xl items-center space-y-8">
-          <div className="p-6 space-y-2 w-full text-white text-left bg-home-bg border border-home-green rounded-lg">
+          <Link
+            href="/guides/101"
+            className="p-6 space-y-2 w-full text-white text-left bg-home-bg border border-home-green rounded-lg"
+          >
             <p className="text-sm text-home-tab-title">
               Not Sure Where to Start?
             </p>
             <p className="text-xl">Beginner guide to CTF&apos;s on Solana</p>
-          </div>
+          </Link>
           {ctfs.map((ctf, index) => (
             <div
               className="p-6 space-y-2 w-full text-white text-left bg-home-bg border border-ctf-bodr rounded-lg"

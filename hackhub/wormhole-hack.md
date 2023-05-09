@@ -4,6 +4,24 @@ description: "  "
 pubDate: "Jan 26 2023"
 year: 2022
 active: true
+toc:
+  [
+    "Why would you use Wormhole?",
+    "How did the hacker steal funds?",
+    "Technical Concepts:",
+    "Technical Explanation",
+    "Potential Impact",
+    "Official Statement",
+  ]
+toc_links:
+  [
+    "why-would-you-use-wormhole",
+    "how-did-the-hacker-steal-funds",
+    "technical-concepts",
+    "technical-explanation",
+    "potential-impact",
+    "official-statement",
+  ]
 ---
 
 Wormhole - an interoperability protocol that allows transferring assets between different blockchains - got exploited for a whopping $325 million!
@@ -11,8 +29,6 @@ Wormhole - an interoperability protocol that allows transferring assets between 
 This hack is the 5th biggest heist in the history of Defi industry so far, and hence becomes very important to understand how the hack played out.
 
 ![](https://i.imgur.com/dwv25OQ.png)
-
-<br>
 
 # Why would you use Wormhole?
 
@@ -23,8 +39,6 @@ Say you want to move your USDC from Ethereum to Solana. As there is no way these
 **Enter Wormhole.**
 
 ![](https://i.imgur.com/Gl6bbB6.png)
-
-<br>
 
 Let's understand at a high level how Wormhole works by taking an example of moving 100 USDC from Ethereum to Solana:
 
@@ -44,11 +58,7 @@ Let's understand at a high level how Wormhole works by taking an example of movi
 
 Now that you have a basic understanding of how Wormhole works let's understand how the hack went underway.
 
-<br>
-
 ![](https://i.imgur.com/VXWz11l.png)
-
-<br>
 
 # How did the hacker steal funds?
 
@@ -76,16 +86,12 @@ Seeing a valid signed approval, Wormhole's Solana contracts minted the 120k Worm
 
 2. converting ~26,000 Wormhole-ETH to SOL and USDC on Solana.
 
-<br>
-
 [Attacker's Ethereum wallet:](https://etherscan.io/address/0x629e7da20197a5429d30da36e77d06cdf796b71a)
 ![](https://i.imgur.com/3qB8RYR.png)
 
 To understand the hack at a technical depth, we first need to run you through some essential technical concepts that will be leveraged inside the technical explanation.
 
 If you are already familiar with Wormhole's architecture, you can straightway move to technical explanation section.
-
-<br>
 
 # Technical Concepts:
 
@@ -95,8 +101,6 @@ This section describes:
 2. Guardians - watchful guards that check the validity of messages passed to Wormhole core.
 3. VAA or Verifiable Action Approval - signed messages submitted on the receiving chain.
 4. Token Bridge - the token bridge that builds on top of the Wormhole core to provide the functionality of bridging tokens cross-chain.
-
-<br>
 
 ## Wormhole Core:
 
@@ -110,8 +114,6 @@ To do so, it requires the following infrastructure:
 2. Network of guardians that provide signed approvals for all Wormhole messages.
 
 More detailed information about Wormhole can be found [here.](https://docs.wormhole.com/wormhole/)
-
-<br>
 
 ## Guardians:
 
@@ -128,8 +130,6 @@ When enough signatures are collected, a multisig is formed.
 The multisig represents proof that the majority of Guardians have observed the same message and agreed to its legitimacy.
 
 This multisig is referred to as Verifiable Action Approval (VAA's for short) in Wormhole.
-
-<br>
 
 ## Verifiable Action Approval (or VAA's)
 
@@ -157,8 +157,6 @@ Now that you know about VAA's, the hacker was actually able to bypass guardian s
 
 They then used this VAA to trigger the 120k ETH mint to their account!
 
-<br>
-
 ## Token Bridge
 
 On top of Wormhole's base message transfer layer, token-bridges are built.
@@ -173,8 +171,6 @@ On top of Wormhole's base message transfer layer, token-bridges are built.
   - The holder of the wrapped assets can, at any time, transfer them back to the bridge and thus obtain the corresponding amount of locked tokens on the native chain.
 
 Hopefully, now you have understood all the critical lego blocks to understand the hack.
-
-<br>
 
 # Technical Explanation
 
@@ -279,8 +275,6 @@ Let's start with the exploit transaction and reverse engineer what exactly happe
   - Now, the Wormhole contracts used `load_instruction_at` to check whether the instruction before triggering `verify_signatures` is a secp256k1 verification instruction or not. **This is where the vulnerability lay that hacker exploited!**
     - ![](https://i.imgur.com/XUHLvVA.png)
 
-<br>
-
 ## Vulnerability Explained:
 
 To recap so far:
@@ -296,8 +290,6 @@ To recap so far:
 5. We see that `verify_signatures` executes 2 instructions in sequential order:
    - call `secp256k1` to extract signatures from the [message](https://github.com/wormhole-foundation/wormhole/blob/ca509f2d73c0780e8516ffdfcaf90b38ab6db203/solana/bridge/program/src/api/verify_signature.rs#L165-L171)
    - call `verify_signatures` to verify the previous signatures and create the `signature_set` account.
-
-<br><br>
 
 Now let's finally understand the vulnerability.
 
@@ -338,8 +330,6 @@ Now let's finally understand the vulnerability.
 
    - The above `message_acc` is then inserted as an input to call `complete_wrapped` function to mint 120k ETH in this [tx](https://solana.fm/tx/2zCz2GgSoSS68eNJENWrYB48dMM1zmH8SZkgYneVDv2G4gRsVfwu5rNXtK5BKFxn7fSqX9BvrBc1rdPAeBEcD6Es?cluster=mainnet-qn1).
 
-<br>
-
 # Potential Impact
 
 For a brief moment, $320 million worth of Wormhole-ETH on Solana was unbacked by deposits on Ethereum side.
@@ -348,8 +338,6 @@ For a brief moment, $320 million worth of Wormhole-ETH on Solana was unbacked by
 - Users could have rushed to sell their Wormhole-ETH, causing its value to crash, which could have serious implications for Solana's Defi ecosystem.
 
 Luckily Jump Trading, Wormhole's parent company, decided to front 120k ETH to avoid the above catastrophe and make users whole.
-
-<br>
 
 # Official Statement
 

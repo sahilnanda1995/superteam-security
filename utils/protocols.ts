@@ -71,6 +71,7 @@ const protocols = [
       "Illegally withdraw liquidity by using compromised admin's private key.",
     audit_by: "N/A",
     hackmd_link: "https://security.superteam.fun/hacks/raydium-hack",
+    link: "/hacks/raydium-hack",
     doh: "2022-12-16",
   },
   {
@@ -83,6 +84,7 @@ const protocols = [
       "Manipulate $MNGO price to profit from leveraged open long position. Use unrealized PNL to borrow liquidity.",
     audit_by: "N/A",
     hackmd_link: "https://hackmd.io/q3J-B87pRV2R0k7mlBl2Jw?view",
+    link: "/hacks/mango-hack",
     doh: "2022-10-11",
   },
   {
@@ -94,6 +96,7 @@ const protocols = [
     technique: "Inflated price of collateral to borrow excess liquidity",
     audit_by: "N/A",
     hackmd_link: "https://hackmd.io/@prastut/Bkxx_JC-h",
+    link: "/hacks/solend-poa-hack",
     doh: "2022-11-02",
   },
   {
@@ -106,6 +109,7 @@ const protocols = [
       "Bypass admin checks using fake account to manipulate core protocol parameters",
     audit_by: "N/A",
     hackmd_link: "https://hackmd.io/@prastut/r1wMdtcf3",
+    link: "/hacks/solend-fav-hack",
     doh: "2021-08-19",
   },
   {
@@ -118,6 +122,7 @@ const protocols = [
       "Transferred assets to hacker account using compromised private key",
     audit_by: "N/A",
     hackmd_link: "https://hackmd.io/@prastut/SJoJUzKz3",
+    link: "/hacks/slope-wallet-hack",
     doh: "2022-08-02",
   },
 ];

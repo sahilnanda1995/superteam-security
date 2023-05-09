@@ -31,7 +31,6 @@ Cashio - a protocol that builds a decentralized stablecoin $CASH - got hacked fo
 The $CASH stablecoin, whose value is supposed to be pegged to $1 dollar, plummeted to a low of $0.0005 right after the exploit!
 
 Let’s first understand what cashio protocol does and then deep dive in figuring out how the hacker tricked the protocol in giving them all the user deposited funds.
-<br>
 
 ## What would you use Cashio protocol for?
 
@@ -60,12 +59,10 @@ High level view of how the hack worked:
 - They then swapped these collateral LP tokens on Saber (a decentralized exchange) to get $16.4 million USDC and $10.8 million USDT respectively.
 - Swapped the remaining $CASH tokens for $8.6 million UST and $17 million USDC through Saber exchange.
 
-<br>
 It’s funny that the project’s tagline was literally:
-<br><br>
+
 <img src="/assets/cashio_title.png" alt="Cashio patch.">
 Now that you understand at a high level how the hack worked, let’s deep dive into technical details of the hack.
-<br><br><br>
 
 ## Technical details:
 
@@ -81,7 +78,6 @@ The vulnerability lied in the Brr program. It has 2 instructions:
 1. print_cash
 2. burn_cash
 
-<br>
 Let’s zoom into `print_cash` instruction:
 
 - The print_cash instruction is responsible for minting $CASH tokens.
@@ -106,7 +102,7 @@ Please check the Attack Payload in the Appendix section that describes what all 
 ## How to fix the vulnerability?
 
 We need to add 1 line of code that is `assert_keys_eq!(self.bank.crate_mint, self.crate_mint)`.
-<br>
+
 This validation ensures that the Bank account's `crate_mint` is the correct `crate_mint` for $CASH.
 <img src="/assets/cashio_patch.png" alt="Cashio patch.">
 
@@ -158,7 +154,7 @@ We don’t have proof whether the hacker did donate money to charity or not.
 ### Attack payload
 
 - bank (faked): [5ahaayrV5epV3oKChn4S4F5oek2vzoMbRpuC2fB4Q2kv](https://explorer.solana.com/address/5ahaayrV5epV3oKChn4S4F5oek2vzoMbRpuC2fB4Q2kv) (created by [bankman program](https://explorer.solana.com/address/BANKhiCgEYd7QmcWwPLkqvTuuLN6qEwXDZgTe6HEbwv1) with faked crate_mint and faked crate_token)
-- collateral (faked): [HrCe9oUYRJKpfWiUwrkRNCxHSRx8gDX1bSF98Aq8qqjq](https://explorer.solana.com/address/HrCe9oUYRJKpfWiUwrkRNCxHSRx8gDX1bSF98Aq8qqjq) (created by the token program with faked collateral.mint [GCnK63zpqfGwpmikGBWRSMJLGLW8dsW97N4VAXKaUSSC](https://explorer.solana.com/address/GCnK63zpqfGwpmikGBWRSMJLGLW8dsW97N4VAXKaUSSC)) <br>
+- collateral (faked): [HrCe9oUYRJKpfWiUwrkRNCxHSRx8gDX1bSF98Aq8qqjq](https://explorer.solana.com/address/HrCe9oUYRJKpfWiUwrkRNCxHSRx8gDX1bSF98Aq8qqjq) (created by the token program with faked collateral.mint [GCnK63zpqfGwpmikGBWRSMJLGLW8dsW97N4VAXKaUSSC](https://explorer.solana.com/address/GCnK63zpqfGwpmikGBWRSMJLGLW8dsW97N4VAXKaUSSC))
 
 - crate_token: [J77Nq48nbq4Etf1voss38R3dTdR3yD7y5F6W6TaVHvmb](https://explorer.solana.com/address/J77Nq48nbq4Etf1voss38R3dTdR3yD7y5F6W6TaVHvmb) (valid crate_token with valid CASH mint)
 
