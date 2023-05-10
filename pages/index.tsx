@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import protocols from "../utils/protocols";
 import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
+import USDollar from "../utils/formatNumberUSD";
 
 export default function Home() {
   const router = useRouter();
@@ -17,12 +18,6 @@ export default function Home() {
   const [isIncOrderByET, setIsIncOrderET] = useState(false);
 
   const [totalAmountHacked, setTotalAmountHacked] = useState(0);
-
-  const USDollar = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    notation: "compact",
-  });
 
   const sortByAmountInc = () => {
     const ordHacks = hacksList.sort((a, b) => {

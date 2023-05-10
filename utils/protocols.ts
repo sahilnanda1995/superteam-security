@@ -10,6 +10,10 @@ const protocols = [
     hackmd_link: "https://security.superteam.fun/hacks/cahio-hack",
     link: "/hacks/cashio-hack",
     doh: "2022-03-23",
+    authors: [
+      { name: "prastut", socials: "https://twitter.com/prastutkumar" },
+      { name: "deep", socials: "https://twitter.com/0xDeep" },
+    ],
   },
   {
     id: 2,
@@ -23,6 +27,10 @@ const protocols = [
     hackmd_link: "https://security.superteam.fun/hacks/jet-hack",
     link: "/hacks/jet-hack",
     doh: "2021-12-21",
+    authors: [
+      { name: "prastut", socials: "https://twitter.com/prastutkumar" },
+      { name: "deep", socials: "https://twitter.com/0xDeep" },
+    ],
   },
   {
     id: 3,
@@ -36,6 +44,10 @@ const protocols = [
     hackmd_link: "https://security.superteam.fun/hacks/wormhole-hack",
     link: "/hacks/wormhole-hack",
     doh: "2022-02-02",
+    authors: [
+      { name: "prastut", socials: "https://twitter.com/prastutkumar" },
+      { name: "deep", socials: "https://twitter.com/0xDeep" },
+    ],
   },
   {
     id: 4,
@@ -48,6 +60,10 @@ const protocols = [
     hackmd_link: "https://security.superteam.fun/hacks/crema-hack",
     link: "/hacks/crema-hack",
     doh: "2022-07-03",
+    authors: [
+      { name: "prastut", socials: "https://twitter.com/prastutkumar" },
+      { name: "deep", socials: "https://twitter.com/0xDeep" },
+    ],
   },
   {
     id: 5,
@@ -60,6 +76,10 @@ const protocols = [
     hackmd_link: "https://security.superteam.fun/hacks/nirvana",
     link: "/hacks/nirvana",
     doh: "2022-07-28",
+    authors: [
+      { name: "prastut", socials: "https://twitter.com/prastutkumar" },
+      { name: "deep", socials: "https://twitter.com/0xDeep" },
+    ],
   },
   {
     id: 6,
@@ -73,6 +93,10 @@ const protocols = [
     hackmd_link: "https://security.superteam.fun/hacks/raydium-hack",
     link: "/hacks/raydium-hack",
     doh: "2022-12-16",
+    authors: [
+      { name: "prastut", socials: "https://twitter.com/prastutkumar" },
+      { name: "deep", socials: "https://twitter.com/0xDeep" },
+    ],
   },
   {
     id: 7,
@@ -86,6 +110,10 @@ const protocols = [
     hackmd_link: "https://hackmd.io/q3J-B87pRV2R0k7mlBl2Jw?view",
     link: "/hacks/mango-hack",
     doh: "2022-10-11",
+    authors: [
+      { name: "prastut", socials: "https://twitter.com/prastutkumar" },
+      { name: "deep", socials: "https://twitter.com/0xDeep" },
+    ],
   },
   {
     id: 8,
@@ -98,6 +126,10 @@ const protocols = [
     hackmd_link: "https://hackmd.io/@prastut/Bkxx_JC-h",
     link: "/hacks/solend-poa-hack",
     doh: "2022-11-02",
+    authors: [
+      { name: "prastut", socials: "https://twitter.com/prastutkumar" },
+      { name: "deep", socials: "https://twitter.com/0xDeep" },
+    ],
   },
   {
     id: 9,
@@ -111,6 +143,10 @@ const protocols = [
     hackmd_link: "https://hackmd.io/@prastut/r1wMdtcf3",
     link: "/hacks/solend-fav-hack",
     doh: "2021-08-19",
+    authors: [
+      { name: "prastut", socials: "https://twitter.com/prastutkumar" },
+      { name: "deep", socials: "https://twitter.com/0xDeep" },
+    ],
   },
   {
     id: 10,
@@ -124,6 +160,10 @@ const protocols = [
     hackmd_link: "https://hackmd.io/@prastut/SJoJUzKz3",
     link: "/hacks/slope-wallet-hack",
     doh: "2022-08-02",
+    authors: [
+      { name: "prastut", socials: "https://twitter.com/prastutkumar" },
+      { name: "deep", socials: "https://twitter.com/0xDeep" },
+    ],
   },
 ];
 

@@ -59,6 +59,7 @@ export async function getStaticProps({ params: { slug } }: any) {
 import { Fragment, useState } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import { Bars3Icon } from "@heroicons/react/20/solid";
+import USDollar from "../../utils/formatNumberUSD";
 
 function MyPopover({ toc, links }: any) {
   // const [isOpen, setIsOpen] = useState(false);
@@ -142,16 +143,46 @@ export default function BlogPage({ frontMatter, content, info }: any) {
         )}
         <div className="flex flex-col w-full items-center">
           <div className="flex flex-col w-full items-center max-w-xl">
-            <div className="text-[#A0A0A0] font-['JetBrains_Mono'] text-left w-full">
-              {info.exploit_type}
-              <span className="font-bold text-[#535353] px-1">&bull;</span>
-              {info.doh}
-              <span className="font-bold text-[#535353] px-1">&bull;</span>
-              {info.amount} Stolen
+            <div className="flex flex-col space-y-2">
+              <div className="text-[#A0A0A0] font-['JetBrains_Mono'] text-left w-full">
+                {info.exploit_type}
+                <span className="font-bold text-[#535353] px-1">&bull;</span>
+                {info.doh}
+                <span className="font-bold text-[#535353] px-1">&bull;</span>
+                {USDollar.format(info.amount)} Stolen
+              </div>
+              <h1 className="flex w-full text-left font-sans text-3xl tracking-wider">
+                {frontMatter.title}
+              </h1>
+              <div className="text-[#A0A0A0] font-['JetBrains_Mono'] text-left w-full">
+                by&nbsp;
+                {info.authors.map((data: any, index: any) => {
+                  if (index == 0) {
+                    return (
+                      <Link
+                        href={data.socials}
+                        target="_blank"
+                        className="underline underline-offset-4"
+                      >
+                        {data.name}
+                      </Link>
+                    );
+                  } else
+                    return (
+                      <>
+                        &nbsp;&&nbsp;
+                        <Link
+                          href={data.socials}
+                          target="_blank"
+                          className="underline underline-offset-4"
+                        >
+                          {data.name}
+                        </Link>
+                      </>
+                    );
+                })}
+              </div>
             </div>
-            <h1 className="flex w-full text-left font-sans text-3xl tracking-wider">
-              {frontMatter.title}
-            </h1>
             <br />
             <ReactMarkdown
               className="prose w-full flex flex-col font-['Inter'] prose-headings:font-['JetBrains_Mono'] max-w-xl prose-headings:text-home-neon"
