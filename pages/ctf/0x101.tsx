@@ -419,7 +419,7 @@ const NextStep = () => {
                 <div className="mt-4">
                   Mission is started:{" "}
                   <a
-                    className="text-blue"
+                    className="text-blue underline cursor-pointer"
                     onClick={(e) => {
                       downloadSourceCode();
                     }}
@@ -440,7 +440,7 @@ const NextStep = () => {
 
                 <button
                   onClick={removeInstance}
-                  className="mt-8 items-center rounded bg-home-green hover:bg-[#1a1f2e] text-base leading-[48px] font-semibold px-6 text-white"
+                  className="mt-8 items-center rounded bg-home-green hover:bg-[#1a1f2e] text-base leading-[48px] font-semibold px-6 text-white ml-4"
                 >
                   Reset Mission
                 </button>

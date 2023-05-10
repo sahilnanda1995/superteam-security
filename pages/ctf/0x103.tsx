@@ -386,7 +386,7 @@ const NextStep = () => {
                 <div className="mt-4">
                   Mission is started:{" "}
                   <a
-                    className="text-blue"
+                    className="text-blue underline cursor-pointer"
                     onClick={(e) => {
                       downloadSourceCode();
                     }}

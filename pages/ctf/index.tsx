@@ -99,9 +99,13 @@ export default function CTF() {
               proudly built by
               {/* <span className="absolute text-xs -ml-1 -mt-1">FS</span> */}
             </div>
-            <div className="italic font-bold underline underline-offset-4 decoration-['#719E69']">
+            <Link
+              href="https://www.findsignal.studio/"
+              target="_blank"
+              className="italic font-bold underline underline-offset-4 decoration-['#719E69']"
+            >
               findsignal studio.
-            </div>
+            </Link>
           </div>
         </footer>
       </div>

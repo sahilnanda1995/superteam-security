@@ -27,10 +27,7 @@ const protocols = [
     hackmd_link: "https://security.superteam.fun/hacks/jet-hack",
     link: "/hacks/jet-hack",
     doh: "2021-12-21",
-    authors: [
-      { name: "prastut", socials: "https://twitter.com/prastutkumar" },
-      { name: "deep", socials: "https://twitter.com/0xDeep" },
-    ],
+    authors: [{ name: "prastut", socials: "https://twitter.com/prastutkumar" }],
   },
   {
     id: 3,
