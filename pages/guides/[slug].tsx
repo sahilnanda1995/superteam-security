@@ -143,7 +143,7 @@ export default function BlogPage({ frontMatter, content }: any) {
         )}
         <div className="flex flex-col w-full items-center">
           <div className="flex flex-col w-full items-center max-w-xl">
-            <h1 className="flex font-archivosemi text-3xl">
+            <h1 className="flex font-archivosemi text-3xl w-full">
               {frontMatter.title}
             </h1>
             <br />
