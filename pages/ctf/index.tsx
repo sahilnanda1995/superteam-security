@@ -96,10 +96,12 @@ export default function CTF() {
         <footer className="flex flex-col items-center text-home-green mt-10 text-sm">
           <div className="text-center bg-home-tab-head p-6 rounded-lg">
             <div>
-              proudly built by findsignal studio.
-              <span className="absolute text-xs -ml-1 -mt-1">FS</span>
+              proudly built by
+              {/* <span className="absolute text-xs -ml-1 -mt-1">FS</span> */}
             </div>
-            <div>designed by @pragdua</div>
+            <div className="italic font-bold underline underline-offset-4 decoration-['#719E69']">
+              findsignal studio.
+            </div>
           </div>
         </footer>
       </div>
