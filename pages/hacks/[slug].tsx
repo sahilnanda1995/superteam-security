@@ -151,7 +151,7 @@ export default function BlogPage({ frontMatter, content, info }: any) {
                 <span className="font-bold text-[#535353] px-1">&bull;</span>
                 {USDollar.format(info.amount)} Stolen
               </div>
-              <h1 className="flex w-full text-left font-sans text-3xl tracking-wider">
+              <h1 className="flex w-full text-left font-archivosemi text-3xl">
                 {frontMatter.title}
               </h1>
               <div className="text-[#A0A0A0] font-['JetBrains_Mono'] text-left w-full">

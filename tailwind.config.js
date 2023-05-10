@@ -14,6 +14,7 @@ module.exports = {
       fontFamily: {
         sans: ["Archivo", "Inter", ...defaultTheme.fontFamily.sans],
         mono: ["JetBrainsMono", "menlo", ...defaultTheme.fontFamily.mono],
+        archivosemi: ["Archivo_SemiExpanded", "sans-serif"],
       },
       fontSize: {
         xs: ["10px", "13px"],

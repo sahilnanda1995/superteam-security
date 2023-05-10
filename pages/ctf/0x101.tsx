@@ -127,7 +127,7 @@ export default function Home() {
               0x101<span className="font-bold text-[#535353] px-1">&bull;</span>
               Hello
             </div>
-            <div className="text-[32px] leading-9 text-white font-sans tracking-wide mt-2">
+            <div className="text-[32px] leading-9 text-white font-archivosemi mt-2">
               Steal A Billy
             </div>
 
