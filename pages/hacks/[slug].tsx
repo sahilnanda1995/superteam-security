@@ -39,11 +39,19 @@ export async function getStaticProps({ params: { slug } }: any) {
   console.log(slug);
   const mdfile = fs.readFileSync(`hackhub/${slug}.md`);
   const { data: frontMatter, content } = matter(mdfile);
+  const info = protocols
+    .filter((data) => data.link == `/hacks/${slug}`)
+    .reduce((data) => {
+      return data;
+    });
+  console.log("info");
+  console.log(info);
 
   return {
     props: {
       frontMatter,
       content,
+      info,
     },
   };
 }
@@ -51,15 +59,6 @@ export async function getStaticProps({ params: { slug } }: any) {
 import { Fragment, useState } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import { Bars3Icon } from "@heroicons/react/20/solid";
-
-const solutions = [
-  { name: "Analytics", href: "#" },
-  { name: "Engagement", href: "#" },
-  { name: "Security", href: "#" },
-  { name: "Integrations", href: "#" },
-  { name: "Automations", href: "#" },
-  { name: "Reports", href: "#" },
-];
 
 function MyPopover({ toc, links }: any) {
   // const [isOpen, setIsOpen] = useState(false);
@@ -94,7 +93,7 @@ function MyPopover({ toc, links }: any) {
   );
 }
 
-export default function BlogPage({ frontMatter, content }: any) {
+export default function BlogPage({ frontMatter, content, info }: any) {
   return (
     <div className="flex flex-col w-full min-h-screen items-center py-8 lg:py-10 px-6 lg:px-[72px] bg-home-bg font-['JetBrains_Mono']">
       <Head>
@@ -143,7 +142,14 @@ export default function BlogPage({ frontMatter, content }: any) {
         )}
         <div className="flex flex-col w-full items-center">
           <div className="flex flex-col w-full items-center max-w-xl">
-            <h1 className="flex font-sans text-3xl tracking-wider">
+            <div className="text-[#A0A0A0] font-['JetBrains_Mono'] text-left w-full">
+              {info.exploit_type}
+              <span className="font-bold text-[#535353] px-1">&bull;</span>
+              {info.doh}
+              <span className="font-bold text-[#535353] px-1">&bull;</span>
+              {info.amount} Stolen
+            </div>
+            <h1 className="flex w-full text-left font-sans text-3xl tracking-wider">
               {frontMatter.title}
             </h1>
             <br />

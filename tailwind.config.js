@@ -41,6 +41,7 @@ module.exports = {
         "ctf-bodr": "#2B2B2B",
         "ctf-txt": "#BFBFBF",
         "guide-sub-txt": "#A0A0A0",
+        "txt-gray1": "#999999",
       },
       keyframes: {
         typing: {
