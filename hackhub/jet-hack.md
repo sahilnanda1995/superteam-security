@@ -50,7 +50,6 @@ So when you open a "position" with Jet, inside the hood the protocol tracks thes
 
 The above two values calculate the collateral-to-loan ratio (short form C-ratio).
 
-:::{.warning}
 What is collateral-to-loan ratio?
 
 It is a ratio to determine whether the collateral backing your loan is in a healthy condition or not. If it's not, then the protocol sells some/all your collateral to cover for the loan.
@@ -76,8 +75,6 @@ This situation is not ideal hence:
 
 - Jet protocol instils a guardrail where the user's position C-ratio should always be >= 125%.
 - If the user's position C-ratio drops below 125%, then Jet protocol sells off part of the collateral to get the position above 125%.
-
-:::
 
 ![](https://i.imgur.com/VXWz11l.png)
 
