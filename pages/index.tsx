@@ -40,8 +40,8 @@ export default function Home() {
 
   const sortByDateInc = () => {
     const ordHacks = hacksList.sort((a, b) => {
-      const da = new Date(a.doh);
-      const db = new Date(b.doh);
+      const da: any = new Date(a.doh);
+      const db: any = new Date(b.doh);
       return da - db;
     });
     setHacksList(() => [...ordHacks]);
@@ -50,8 +50,8 @@ export default function Home() {
 
   const sortByDateDec = () => {
     const ordHacks = hacksList.sort((a, b) => {
-      const da = new Date(a.doh);
-      const db = new Date(b.doh);
+      const da: any = new Date(a.doh);
+      const db: any = new Date(b.doh);
       return db - da;
     });
     setHacksList(() => [...ordHacks]);
