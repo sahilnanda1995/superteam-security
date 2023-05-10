@@ -79,7 +79,7 @@ function MyPopover({ toc, links }: any) {
         {/* Popover content */}
         <div className="flex flex-col w-full">
           <div>contents</div>
-          <ul className="flex flex-col text-xs mt-2 space-y-1 list-outside">
+          <ul className="flex flex-col text-xs mt-2 space-y-1 list-inside list-disc">
             {toc.map((data: string, index: number) => (
               <li key={index} className="hover:underline">
                 <Link href={`#${links[index]}`} scroll={false}>
@@ -112,7 +112,7 @@ export default function BlogPage({ frontMatter, content, info }: any) {
           <div className="fixed w-1/6 pr-8 lg:pr-2">
             <div className="hidden 2lg:flex flex-col">
               <div>contents</div>
-              <ul className="flex flex-col text-sm mt-2 space-y-1 list-outside">
+              <ul className="flex flex-col list-disc list-inside text-sm mt-2 space-y-1">
                 {frontMatter.toc.map((data: string, index: number) => (
                   <li key={index} className="hover:underline">
                     <Link
