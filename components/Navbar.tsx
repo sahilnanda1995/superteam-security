@@ -17,7 +17,7 @@ export default function Navbar() {
         </div>
         <Link
           href="/ctf"
-          className="-mx-3 block rounded-lg py-2 px-3 leading-6 text-white"
+          className="-mx-3 block rounded-lg py-2 px-3 leading-6 text-white hover:underline"
         >
           CTFs
         </Link>

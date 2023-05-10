@@ -143,7 +143,7 @@ export default function BlogPage({ frontMatter, content, info }: any) {
         )}
         <div className="flex flex-col w-full items-center">
           <div className="flex flex-col w-full items-center max-w-xl">
-            <div className="flex flex-col space-y-2">
+            <div className="flex flex-col space-y-2 w-full">
               <div className="text-[#A0A0A0] font-['JetBrains_Mono'] text-left w-full">
                 {info.exploit_type}
                 <span className="font-bold text-[#535353] px-1">&bull;</span>
