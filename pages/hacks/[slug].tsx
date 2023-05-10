@@ -160,6 +160,7 @@ export default function BlogPage({ frontMatter, content, info }: any) {
                   if (index == 0) {
                     return (
                       <Link
+                        key={index}
                         href={data.socials}
                         target="_blank"
                         className="underline underline-offset-4"
@@ -169,7 +170,7 @@ export default function BlogPage({ frontMatter, content, info }: any) {
                     );
                   } else
                     return (
-                      <>
+                      <div key={index} className="inline">
                         &nbsp;&&nbsp;
                         <Link
                           href={data.socials}
@@ -178,7 +179,7 @@ export default function BlogPage({ frontMatter, content, info }: any) {
                         >
                           {data.name}
                         </Link>
-                      </>
+                      </div>
                     );
                 })}
               </div>
