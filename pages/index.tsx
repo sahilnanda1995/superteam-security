@@ -17,6 +17,10 @@ export default function Home() {
   // exploit type
   const [isIncOrderByET, setIsIncOrderET] = useState(false);
 
+  const [isAmtArrVisible, setIsAmtArrVisible] = useState(true);
+  const [isDateArrVisible, setIsDateArrVisible] = useState(false);
+  const [isETArrVisible, setIsETArrVisible] = useState(false);
+
   const [totalAmountHacked, setTotalAmountHacked] = useState(0);
 
   const sortByAmountInc = () => {
@@ -175,65 +179,95 @@ export default function Home() {
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-4 whitespace-nowrap text-left text-sm"
+                  className="px-6 py-4 whitespace-nowrap w-48 text-left text-sm cursor-pointer"
+                  onClick={() => {
+                    setIsDateArrVisible(true);
+                    setIsAmtArrVisible(false);
+                    setIsETArrVisible(false);
+                    setIsIncOrderDate((prev) => !prev);
+                  }}
                 >
                   date <span className="hidden lg:inline-block">of hack</span>
-                  {isIncOrderByDate ? (
-                    <ArrowDownIcon
-                      className="ml-2 inline cursor-pointer"
-                      width={20}
-                      height={20}
-                      onClick={() => setIsIncOrderDate(false)}
-                    />
+                  {isDateArrVisible ? (
+                    isIncOrderByDate ? (
+                      <ArrowUpIcon
+                        className="ml-2 inline"
+                        width={20}
+                        height={20}
+                        // onClick={() => setIsIncOrderDate(false)}
+                      />
+                    ) : (
+                      <ArrowDownIcon
+                        className="ml-2 inline"
+                        width={20}
+                        height={20}
+                        // onClick={() => setIsIncOrderDate(true)}
+                      />
+                    )
                   ) : (
-                    <ArrowUpIcon
-                      className="ml-2 inline cursor-pointer"
-                      width={20}
-                      height={20}
-                      onClick={() => setIsIncOrderDate(true)}
-                    />
+                    <></>
                   )}
                 </th>
                 <th
                   scope="col"
-                  className="hidden px-6 py-4 whitespace-nowrap text-left text-sm lg:table-cell"
+                  className="hidden px-6 py-4 whitespace-nowrap w-40 text-left text-sm lg:table-cell cursor-pointer"
+                  onClick={() => {
+                    setIsDateArrVisible(false);
+                    setIsAmtArrVisible(true);
+                    setIsETArrVisible(false);
+                    setIsIncOrderAmt((prev) => !prev);
+                  }}
                 >
                   $ stolen
-                  {isIncOrderByAmt ? (
-                    <ArrowDownIcon
-                      className="ml-2 inline cursor-pointer"
-                      width={20}
-                      height={20}
-                      onClick={() => setIsIncOrderAmt(false)}
-                    />
+                  {isAmtArrVisible ? (
+                    isIncOrderByAmt ? (
+                      <ArrowUpIcon
+                        className="ml-2 inline"
+                        width={20}
+                        height={20}
+                        // onClick={() => setIsIncOrderAmt(false)}
+                      />
+                    ) : (
+                      <ArrowDownIcon
+                        className="ml-2 inline"
+                        width={20}
+                        height={20}
+                        // onClick={() => setIsIncOrderAmt(true)}
+                      />
+                    )
                   ) : (
-                    <ArrowUpIcon
-                      className="ml-2 inline cursor-pointer"
-                      width={20}
-                      height={20}
-                      onClick={() => setIsIncOrderAmt(true)}
-                    />
+                    <></>
                   )}
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-4 text-left whitespace-nowrap text-sm"
+                  className="px-6 py-4 text-left whitespace-nowrap w-48 text-sm cursor-pointer"
+                  onClick={() => {
+                    setIsDateArrVisible(false);
+                    setIsAmtArrVisible(false);
+                    setIsETArrVisible(true);
+                    setIsIncOrderET((prev) => !prev);
+                  }}
                 >
                   exploit type
-                  {isIncOrderByET ? (
-                    <ArrowDownIcon
-                      className="ml-2 inline cursor-pointer"
-                      width={20}
-                      height={20}
-                      onClick={() => setIsIncOrderET(false)}
-                    />
+                  {isETArrVisible ? (
+                    isIncOrderByET ? (
+                      <ArrowUpIcon
+                        className="ml-2 inline"
+                        width={20}
+                        height={20}
+                        // onClick={() => setIsIncOrderET(false)}
+                      />
+                    ) : (
+                      <ArrowDownIcon
+                        className="ml-2 inline"
+                        width={20}
+                        height={20}
+                        // onClick={() => setIsIncOrderET(true)}
+                      />
+                    )
                   ) : (
-                    <ArrowUpIcon
-                      className="ml-2 inline cursor-pointer"
-                      width={20}
-                      height={20}
-                      onClick={() => setIsIncOrderET(true)}
-                    />
+                    <></>
                   )}
                 </th>
                 <th
