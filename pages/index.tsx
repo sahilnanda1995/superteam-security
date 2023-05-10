@@ -16,6 +16,8 @@ export default function Home() {
   // exploit type
   const [isIncOrderByET, setIsIncOrderET] = useState(false);
 
+  const [totalAmountHacked, setTotalAmountHacked] = useState(0);
+
   const USDollar = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -95,14 +97,6 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (isIncOrderByAmt) {
-      sortByAmountInc();
-    } else {
-      sortByAmountDec();
-    }
-  }, [isIncOrderByAmt]);
-
-  useEffect(() => {
     if (isIncOrderByDate) {
       sortByDateInc();
     } else {
@@ -117,6 +111,22 @@ export default function Home() {
       sortByETDec();
     }
   }, [isIncOrderByET]);
+
+  useEffect(() => {
+    if (isIncOrderByAmt) {
+      sortByAmountInc();
+    } else {
+      sortByAmountDec();
+    }
+  }, [isIncOrderByAmt]);
+
+  useEffect(() => {
+    const totalHacked = protocols
+      .map((data) => data.amount)
+      .reduce((acc, cur) => acc + cur, 0);
+
+    setTotalAmountHacked(totalHacked);
+  }, []);
 
   return (
     <div className="relative isolate min-h-screen overflow-hidden bg-home-bg font-['JetBrains_Mono']">
@@ -152,7 +162,9 @@ export default function Home() {
               </p>
             </div>
             <div className="text-sm text-home-bg font-bold p-2 bg-home-green border-0 rounded-lg">
-              <p>$234M hacked across 10 Protocols</p>
+              <p>
+                {USDollar.format(totalAmountHacked)} hacked across 10 Protocols
+              </p>
             </div>
           </div>
         </div>
